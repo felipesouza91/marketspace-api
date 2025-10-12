@@ -1,5 +1,5 @@
 -- CreateTable
-CREATE TABLE "UsersTokens" (
+CREATE TABLE "users_tokens" (
     "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "expires_in" INTEGER NOT NULL,
     "user_id" UUID NOT NULL,
