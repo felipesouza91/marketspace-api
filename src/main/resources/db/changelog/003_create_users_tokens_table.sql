@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE "UsersTokens" (
-    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid()
+    "id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     "expires_in" INTEGER NOT NULL,
     "user_id" UUID NOT NULL,
-    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "UsersTokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

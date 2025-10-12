@@ -1,3 +1,15 @@
 databaseChangeLog:
   - include:
-      file: classpath:/db/changelog/001_create_user_table.sql
+      file: classpath:/db/changelog/001_enable_extensions.sql
+  - include:
+      file: classpath:/db/changelog/002_create_users_table.sql
+  - include:
+      file: classpath:/db/changelog/003_create_users_tokens_table.sql
+  - include:
+      file: classpath:/db/changelog/004_create_products_table.sql
+  - include:
+      file: classpath:/db/changelog/005_create_product_image_table.sql
+  - include:
+      file: classpath:/db/changelog/006_create_payments_tables.sql
+  - include:
+      file: classpath:/db/changelog/007_create_favorite_products_tables.sql
