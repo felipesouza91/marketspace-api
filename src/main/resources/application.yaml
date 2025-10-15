@@ -7,3 +7,9 @@ spring:
     password: ${DB_PASSWORD}
   liquibase:
     change-log: classpath:/db/db.changelog-master.yaml
+
+api:
+  security:
+    token:
+      secret: ${TOKEN_SECRET}
+      expiration-time: ${TOKEN_EXPIRATION_TIME:60} # 1h in minuts
