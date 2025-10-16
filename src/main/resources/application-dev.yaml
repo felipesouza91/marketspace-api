@@ -1,9 +1,0 @@
-spring:
-  application:
-    name: marketspace-api
-  datasource:
-    url: jdbc:postgresql://localhost/marketplacedb
-    username: marketplace_user
-    password: marketplace_password
-  liquibase:
-    change-log: classpath:/db/db.changelog-master.yaml
