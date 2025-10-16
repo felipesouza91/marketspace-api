@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.secutiry.services.impl;
+package br.app.fsantana.marketspaceapi.domain.services.impl;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.RefreshTokenDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
