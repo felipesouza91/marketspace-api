@@ -22,17 +22,18 @@ public class ProductSpecs {
 
     public static Specification<Product> withFilter(UUID userId, ProductFilterRequest filters) {
         return (root, query, builder) -> {
-            Predicate[] predicates = withFilterPredicates(root, builder, filters);
+            Predicate[] predicates = withFilterPredicates(root, builder, filters,  userId);
 
             return predicates.length > 0 ? builder.and(predicates) : null;
         };
     }
 
     private static Predicate[] withFilterPredicates(Root<Product> root,
-                                              CriteriaBuilder criteriaBuilder, ProductFilterRequest filters) {
+                                              CriteriaBuilder criteriaBuilder, ProductFilterRequest filters, UUID userId) {
 
         List<Predicate> likePredicates = new ArrayList<>();
         likePredicates.add(criteriaBuilder.equal(root.get("isActive"), true));
+        likePredicates.add(criteriaBuilder.notEqual(root.get("user").get("id"), userId));
         if( Objects.isNull(filters)) {
             return likePredicates.toArray(Predicate[]::new);
         }

@@ -71,7 +71,7 @@ public class ProductsController {
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     private ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         productService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

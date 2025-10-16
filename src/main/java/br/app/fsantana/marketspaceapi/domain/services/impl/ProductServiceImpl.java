@@ -50,7 +50,7 @@ public class ProductServiceImpl implements ProductService  {
 
     @Override
     public Product findById(UUID id) {
-        return repository.findByIdAndUserId(id, getUser().getId())
+        return repository.findById(id)
                 .orElseThrow(() -> new AppEntityNotFound("Product not found"));
     }
 
@@ -93,7 +93,8 @@ public class ProductServiceImpl implements ProductService  {
 
     @Override
     public void deleteById(UUID id) {
-        repository.findById(id).orElseThrow(() -> new AppEntityNotFound("Product not found"));
+        repository.findByIdAndUserId(id, getUser().getId())
+                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
         repository.deleteById(id);
     }
 
