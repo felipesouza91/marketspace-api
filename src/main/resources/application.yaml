@@ -13,3 +13,9 @@ api:
     token:
       secret: ${TOKEN_SECRET}
       expiration-time: ${TOKEN_EXPIRATION_TIME:60} # 1h in minuts
+
+  storage:
+    minio:
+      url: ${MINIO_URL}
+      accessKey: ${MINIO_ACCESS_KEY}
+      accessSecret: ${MINIO_ACCESS_SECRET}
