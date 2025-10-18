@@ -5,7 +5,7 @@ import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.UserFileService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

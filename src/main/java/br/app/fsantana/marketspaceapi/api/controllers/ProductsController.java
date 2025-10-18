@@ -9,7 +9,7 @@ import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;

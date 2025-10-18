@@ -8,7 +8,7 @@ import br.app.fsantana.marketspaceapi.secutiry.api.response.AuthResponse;
 import br.app.fsantana.marketspaceapi.secutiry.api.response.TokenResponse;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.SessionService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppRuleException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.utils.mappers.SessionMapper;
 import br.app.fsantana.marketspaceapi.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;

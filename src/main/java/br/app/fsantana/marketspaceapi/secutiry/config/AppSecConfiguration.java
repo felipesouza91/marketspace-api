@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.infra.configs;
+package br.app.fsantana.marketspaceapi.secutiry.config;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.User;
@@ -15,11 +15,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.UUID;
-
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfiguration {
+public class AppSecConfiguration {
 
     private final UserDataProvider userDataProvider;
 

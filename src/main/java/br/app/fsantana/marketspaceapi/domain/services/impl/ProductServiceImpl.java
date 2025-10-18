@@ -9,14 +9,13 @@ import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppEntityNotFound;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppRuleException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;

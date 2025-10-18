@@ -5,7 +5,7 @@ import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.RefreshToken;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.RefreshTokenService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

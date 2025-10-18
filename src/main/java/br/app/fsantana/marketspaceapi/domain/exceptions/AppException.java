@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.utils.exceptions;
+package br.app.fsantana.marketspaceapi.domain.exceptions;
 
 /**
  * Created by felip on 15/10/2025.

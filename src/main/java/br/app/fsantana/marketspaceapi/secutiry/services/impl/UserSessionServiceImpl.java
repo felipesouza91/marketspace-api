@@ -4,7 +4,7 @@ import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
