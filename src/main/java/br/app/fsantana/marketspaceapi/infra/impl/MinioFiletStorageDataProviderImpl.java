@@ -1,7 +1,7 @@
 package br.app.fsantana.marketspaceapi.infra.impl;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppFileException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppFileException;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
