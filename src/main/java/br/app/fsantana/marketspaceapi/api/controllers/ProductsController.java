@@ -79,7 +79,7 @@ public class ProductsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/image/${id}")
+    @PostMapping("/image/{id}")
     public ResponseEntity<?> saveImage(@PathVariable UUID productId ) {
         throw new AppException("Not implemented");
     }
