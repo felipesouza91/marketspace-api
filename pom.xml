@@ -27,6 +27,7 @@
 		<java.jwt.version>4.4.0</java.jwt.version>
 		<springdoc-openapi-starter.version>2.8.13</springdoc-openapi-starter.version>
 		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
+		<minio.version>8.5.17</minio.version>
 	</properties>
 	<dependencies>
 
@@ -67,6 +68,13 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-jackson</artifactId>
 			<version>${jsonwebtoken.version}</version>
+		</dependency>
+
+		<!-- Maven -->
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version> <!-- Use the latest version -->
 		</dependency>
 
 		<dependency>
