@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.configs.api.dto;
+package br.app.fsantana.marketspaceapi.infra.configs.api.dto;
 
 import lombok.Builder;
 

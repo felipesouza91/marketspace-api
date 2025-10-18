@@ -1,7 +1,7 @@
-package br.app.fsantana.marketspaceapi.configs.api;
+package br.app.fsantana.marketspaceapi.infra.configs.api;
 
-import br.app.fsantana.marketspaceapi.configs.api.dto.FieldProblem;
-import br.app.fsantana.marketspaceapi.configs.api.dto.ProblemType;
+import br.app.fsantana.marketspaceapi.infra.configs.api.dto.FieldProblem;
+import br.app.fsantana.marketspaceapi.infra.configs.api.dto.ProblemType;
 import br.app.fsantana.marketspaceapi.utils.exceptions.AppEntityNotFound;
 import br.app.fsantana.marketspaceapi.utils.mappers.AppSecurityException;
 import com.fasterxml.jackson.databind.JsonMappingException;

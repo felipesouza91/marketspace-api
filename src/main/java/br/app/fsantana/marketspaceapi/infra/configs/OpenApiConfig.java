@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.configs;
+package br.app.fsantana.marketspaceapi.infra.configs;
 
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;

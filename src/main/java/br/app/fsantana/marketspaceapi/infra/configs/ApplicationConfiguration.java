@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.configs;
+package br.app.fsantana.marketspaceapi.infra.configs;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.User;
