@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
+import br.app.fsantana.marketspaceapi.api.requests.DeleteImageRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductActiveUpdateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
@@ -8,6 +9,7 @@ import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
+import br.app.fsantana.marketspaceapi.utils.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -48,32 +50,42 @@ public class ProductsController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<ProductResponse> getById(@PathVariable UUID id) {
+    public ResponseEntity<ProductResponse> getById(@PathVariable UUID id) {
        Product product =  productService.findById(id);
        return ResponseEntity.ok(productMapper.toResponse(product));
     }
 
     @GetMapping
-    private ResponseEntity<List<ProductResumeResponse>> getAll(ProductFilterRequest requestFilter) {
+    public ResponseEntity<List<ProductResumeResponse>> getAll(ProductFilterRequest requestFilter) {
       List<Product> result =  productService.findByFilters(requestFilter);
       return ResponseEntity.ok(result.stream().map(productMapper::toResponseResume).toList());
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<ProductResponse> updateById(@PathVariable UUID id, @RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<ProductResponse> updateById(@PathVariable UUID id, @RequestBody ProductUpdateRequest request) {
         Product updated = productService.updateById(id, productMapper.toModel(request));
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
 
     @PatchMapping("/{id}")
-    private ResponseEntity<ProductResponse> patchById(@PathVariable UUID id, @RequestBody ProductActiveUpdateRequest request) {
+    public ResponseEntity<ProductResponse> patchById(@PathVariable UUID id, @RequestBody ProductActiveUpdateRequest request) {
         Product updated = productService.changeActiveState(id, request.getIsActive());
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         productService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PostMapping("/image/${id}")
+    public ResponseEntity<?> saveImage(@PathVariable UUID productId ) {
+        throw new AppException("Not implemented");
+    }
+
+    @DeleteMapping("/image")
+    public ResponseEntity<?> saveImage(@PathVariable DeleteImageRequest request ) {
+        throw new AppException("Not implemented");
     }
 }
