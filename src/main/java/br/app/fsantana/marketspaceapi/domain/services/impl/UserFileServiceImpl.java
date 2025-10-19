@@ -2,10 +2,10 @@ package br.app.fsantana.marketspaceapi.domain.services.impl;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.UserFileService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
-import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,13 +36,13 @@ public class UserFileServiceImpl implements UserFileService {
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
             String avatarName = getCurrentUser().getId().toString() + "."+content;
 
-            fileStorageDataProvider.uploadFile("marketstore", avatarName, file.getInputStream(), file.getContentType());
+            String url = fileStorageDataProvider.uploadFile("avatars", avatarName, file.getInputStream(), file.getContentType());
             getCurrentUser().setAvatar(avatarName);
             userDataProvider.save(getCurrentUser());
 
             Files.delete(filePath);
 
-            return fileStorageDataProvider.getFileUrl("marketstore", avatarName);
+            return url;
         } catch (IOException e) {
             throw new AppException("Erro when update files");
         }
