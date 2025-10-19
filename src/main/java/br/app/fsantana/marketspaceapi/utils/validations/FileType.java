@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE, ElementType.CONSTRUCTOR, ElementType.PARAMETER, ElementType.TYPE_USE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = { FileTypeValidator.class })
+@Constraint(validatedBy = { FileTypeValidator.class, ListFileTypeValidator.class })
 public @interface FileType {
 
     String message() default "Tipo de arquivo errado";
