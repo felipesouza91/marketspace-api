@@ -74,8 +74,7 @@ public class Product {
     )
     private Set<PaymentMethod> paymentMethods;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "product")
     private Set<ProductImage> productImages;
 
     @Column(name = "created_at")

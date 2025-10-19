@@ -2,13 +2,14 @@ package br.app.fsantana.marketspaceapi.utils.mappers;
 
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductUpdateRequest;
+import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.PaymentMethod;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
+import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 /**
  * Created by felip on 12/10/2025.
@@ -21,6 +22,7 @@ public interface ProductMapper {
 
     Product toModel(ProductUpdateRequest productRequest);
 
+    @Mapping(source = "productImages", target = "images")
     ProductResponse toResponse(Product product);
 
     ProductResumeResponse toResponseResume(Product product);

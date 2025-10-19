@@ -1,16 +1,17 @@
 package br.app.fsantana.marketspaceapi.domain.services.impl;
 
 import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.PaymentModelRepository;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.specifications.ProductSpecs;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.domain.models.PaymentMethod;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
-import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
-import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class ProductServiceImpl implements ProductService  {
     private final ProductDataProvider repository;
     private final PaymentModelRepository paymentModelRepository;
     private final UserSessionService userSessionService;
+    private final FileStorageDataProvider fileStorageDataProvider;
 
     @Override
     public Product save(Product product) {
@@ -93,8 +95,15 @@ public class ProductServiceImpl implements ProductService  {
 
     @Override
     public void deleteById(UUID id) {
-        repository.findByIdAndUserId(id, getUser().getId())
+        Product product = repository.findByIdAndUserId(id, getUser().getId())
                 .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+
+        product.getProductImages()
+                .forEach(item -> {
+                    String substring = item.getContentType().substring(item.getContentType().indexOf("/") + 1);
+                    fileStorageDataProvider.deleteFile(item.getPath(), item.getId().toString() + "."+ substring);
+                });
+
         repository.deleteById(id);
     }
 

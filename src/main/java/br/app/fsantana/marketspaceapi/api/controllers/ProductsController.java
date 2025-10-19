@@ -5,9 +5,12 @@ import br.app.fsantana.marketspaceapi.api.requests.ProductActiveUpdateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductUpdateRequest;
+import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
+import br.app.fsantana.marketspaceapi.api.responses.ProductImageResumeResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
+import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
 import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
@@ -31,7 +34,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Created by felip on 12/10/2025.
@@ -45,7 +50,6 @@ public class ProductsController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
-    private final ProductImageService productImageService;
 
     @PostMapping
     public ResponseEntity<ProductResponse> create(@RequestBody ProductCreateRequest input) {
@@ -85,18 +89,5 @@ public class ProductsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> saveImage(
-            @PathVariable UUID id,
-            @Valid @FileType(types = {"png", "jpeg", "jpg"}) List<MultipartFile> files) {
 
-        productImageService.saveAll(id, files);
-
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/image")
-    public ResponseEntity<?> saveImage(@PathVariable DeleteImageRequest request ) {
-        throw new AppException("Not implemented");
-    }
 }
