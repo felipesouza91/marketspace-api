@@ -8,12 +8,16 @@ import br.app.fsantana.marketspaceapi.api.requests.ProductUpdateRequest;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
+import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductMapper;
+import br.app.fsantana.marketspaceapi.utils.validations.FileType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -40,6 +45,7 @@ public class ProductsController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final ProductImageService productImageService;
 
     @PostMapping
     public ResponseEntity<ProductResponse> create(@RequestBody ProductCreateRequest input) {
@@ -79,9 +85,14 @@ public class ProductsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PostMapping("/image/{id}")
-    public ResponseEntity<?> saveImage(@PathVariable UUID productId ) {
-        throw new AppException("Not implemented");
+    @PostMapping(value = "/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> saveImage(
+            @PathVariable UUID id,
+            @Valid @FileType(types = {"png", "jpeg", "jpg"}) List<MultipartFile> files) {
+
+        productImageService.saveAll(id, files);
+
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/image")

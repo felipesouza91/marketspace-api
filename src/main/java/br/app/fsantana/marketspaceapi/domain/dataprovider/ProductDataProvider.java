@@ -1,6 +1,7 @@
 package br.app.fsantana.marketspaceapi.domain.dataprovider;
 
 import br.app.fsantana.marketspaceapi.domain.models.Product;
+import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
@@ -14,7 +15,8 @@ import java.util.UUID;
 
 public interface ProductDataProvider extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
 
-    Optional<Product> findByIdAndUserId(UUID id, UUID id1);
+    Optional<Product> findByIdAndUserId(UUID id, UUID userId);
 
     List<Product> findByUserId(UUID id);
+
 }

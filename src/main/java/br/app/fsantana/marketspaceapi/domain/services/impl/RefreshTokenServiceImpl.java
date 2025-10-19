@@ -34,8 +34,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 
     @Override
     public RefreshToken findById(UUID id) {
-        UUID userId = UUID.randomUUID();
-        return refreshTokenDataProvider.findByIdAndUserId(id, userId)
+        return refreshTokenDataProvider.findById(id)
                 .orElseThrow(() -> new AppEntityNotFound("Refresh token not found"));
 
     }

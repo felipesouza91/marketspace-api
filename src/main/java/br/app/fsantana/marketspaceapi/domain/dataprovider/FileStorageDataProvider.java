@@ -14,4 +14,6 @@ public interface FileStorageDataProvider {
     boolean fileExits(String path, String fileName);
 
     String getFileUrl(String path, String fileName);
+
+    void deleteFile(String path, String fileName);
 }

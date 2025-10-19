@@ -9,6 +9,7 @@ import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -32,7 +33,7 @@ public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvide
 
     @Override
     public String uploadFile(String path, String fileName, InputStream inputStream, String contentType) {
-        String finalFile = path+ "\\"+ fileName;
+        String finalFile = getNameWithPath(path, fileName);
         try {
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(properties.getBucketName()).build());
             if (!found) {
@@ -52,11 +53,10 @@ public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvide
 
     @Override
     public boolean fileExits(String path, String fileName) {
-        String finalFile = path+ "\\"+ fileName;
         try {
             minioClient.getObject(GetObjectArgs.builder()
                     .bucket(properties.getBucketName())
-                    .object(finalFile).build());
+                    .object(getNameWithPath(path, fileName)).build());
             return true;
         } catch (Exception e) {
             return false;
@@ -66,15 +66,31 @@ public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvide
 
     @Override
     public String getFileUrl(String path, String fileName) {
-        String finalFile = path+ "\\"+ fileName;
         try {
             return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(properties.getBucketName())
-                    .object(finalFile)
+                    .object(getNameWithPath(path, fileName))
                             .method(Method.GET)
                     .build());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public void deleteFile(String path, String fileName) {
+        try {
+            minioClient.removeObject(RemoveObjectArgs.builder()
+                    .bucket(properties.getBucketName())
+                    .object(getNameWithPath(path, fileName))
+                    .build());
+        } catch (Exception e) {
+            throw new AppFileException("Erro during upload");
+        }
+
+    }
+
+    private String getNameWithPath(String path, String fileName) {
+        return path+ "/"+ fileName;
     }
 }
