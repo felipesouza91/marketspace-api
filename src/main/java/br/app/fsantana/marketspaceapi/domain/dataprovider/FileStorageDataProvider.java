@@ -9,9 +9,9 @@ import java.net.URI;
 
 public interface FileStorageDataProvider {
 
-    String uploadFile(String bucketName, String fileName, InputStream inputStream, String contentType);
+    String uploadFile(String path, String fileName, InputStream inputStream, String contentType);
 
-    boolean fileExits(String bucketName, String fileName);
+    boolean fileExits(String path, String fileName);
 
-    String getFileUrl(String bucketName, String fileName);
+    String getFileUrl(String path, String fileName);
 }

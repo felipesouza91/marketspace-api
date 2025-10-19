@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
 @RequiredArgsConstructor
 public class MinioConfig {
 
-    private  final MinioProperties properties;
+    private final MinioProperties properties;
 
     @Bean
     public MinioClient minioClient() {

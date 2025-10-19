@@ -2,6 +2,7 @@ package br.app.fsantana.marketspaceapi.infra.impl;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppFileException;
+import br.app.fsantana.marketspaceapi.infra.configs.storage.minio.MinioProperties;
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -10,6 +11,7 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -19,37 +21,42 @@ import java.io.InputStream;
  * Created by felip on 17/10/2025.
  */
 
+@Log4j2
 @Service
 @Profile("minio")
 @RequiredArgsConstructor
 public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvider {
 
     private final MinioClient minioClient;
+    private final MinioProperties properties;
 
     @Override
-    public String uploadFile(String bucketName, String fileName, InputStream inputStream, String contentType) {
+    public String uploadFile(String path, String fileName, InputStream inputStream, String contentType) {
+        String finalFile = path+ "\\"+ fileName;
         try {
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
+            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(properties.getBucketName()).build());
             if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(properties.getBucketName()).build());
             }
             minioClient.putObject(
-                    PutObjectArgs.builder().bucket(bucketName).object(fileName).stream(
+                    PutObjectArgs.builder().bucket(properties.getBucketName()).object(finalFile).stream(
                                     inputStream, inputStream.available(), -1)
                             .contentType(contentType)
                             .build());
-            return "";
+            return getFileUrl(properties.getBucketName(), finalFile );
         } catch (Exception e) {
+            log.error(e);
             throw new AppFileException("Erro during upload");
         }
     }
 
     @Override
-    public boolean fileExits(String bucketName, String fileName) {
+    public boolean fileExits(String path, String fileName) {
+        String finalFile = path+ "\\"+ fileName;
         try {
             minioClient.getObject(GetObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(fileName).build());
+                    .bucket(properties.getBucketName())
+                    .object(finalFile).build());
             return true;
         } catch (Exception e) {
             return false;
@@ -58,11 +65,12 @@ public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvide
     }
 
     @Override
-    public String getFileUrl(String bucketName, String fileName) {
+    public String getFileUrl(String path, String fileName) {
+        String finalFile = path+ "\\"+ fileName;
         try {
             return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucketName)
-                    .object(fileName)
+                    .bucket(properties.getBucketName())
+                    .object(finalFile)
                             .method(Method.GET)
                     .build());
         } catch (Exception e) {
