@@ -4,6 +4,7 @@ import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -12,6 +13,8 @@ import java.util.UUID;
 
 public interface ProductImageService {
 
-    List<ProductImage> saveAll(UUID productId, List<MultipartFile> files);
+    Set<ProductImage> saveAll(UUID productId, List<MultipartFile> files);
+
+    void deleteImage(UUID productId, UUID imageId);
 
 }

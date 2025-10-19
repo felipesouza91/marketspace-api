@@ -13,7 +13,6 @@ import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Files;
@@ -41,9 +40,20 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public Set<ProductImage> saveAll(UUID productId, List<MultipartFile> files) {
         Product product = productDataProvider.findByIdAndUserId(productId, getCurrentUser().getId())
-                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+                .orElseThrow(() -> new AppEntityNotFound("Product Image invalid"));
         Set<ProductImage> images = files.stream().map(item -> saveImage(product, item)).collect(Collectors.toSet());
         return images;
+    }
+
+    @Override
+    public void deleteImage(UUID productId, UUID imageId) {
+        ProductImage productImage = productImageRepository
+                .findByIdAndProductIdAndProductUserId(imageId, productId, getCurrentUser().getId())
+                .orElseThrow(() -> new AppEntityNotFound("Product Image not found"));
+        String content = productImage.getContentType()
+                .substring(productImage.getContentType().indexOf("/") + 1);
+        fileStorageDataProvider.deleteFile(productImage.getPath(), productImage.getId() +"."+ content);
+        productImageRepository.deleteById(imageId);
     }
 
 
