@@ -38,38 +38,31 @@ public class ProductImageServiceImpl implements ProductImageService {
     private final UserSessionService userSessionService;
     private final ProductImageRepository productImageRepository;
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
-    public List<ProductImage> saveAll(UUID productId, List<MultipartFile> files) {
-        try {
-            Product product = productDataProvider.findByIdAndUserId(productId, getCurrentUser().getId())
-                    .orElseThrow(() -> new AppEntityNotFound("Product not found"));
-
-            Set<ProductImage> imagens = files.stream().map(item -> saveImage(product, item)).collect(Collectors.toSet());
-            return List.of();
-        } catch (Exception e) {
-            throw e;
-        }
-
+    public Set<ProductImage> saveAll(UUID productId, List<MultipartFile> files) {
+        Product product = productDataProvider.findByIdAndUserId(productId, getCurrentUser().getId())
+                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+        Set<ProductImage> images = files.stream().map(item -> saveImage(product, item)).collect(Collectors.toSet());
+        return images;
     }
 
 
     private ProductImage saveImage(Product product, MultipartFile file) {
+        String updatePath = "products"+ "/" + product.getId().toString();
+
         try {
             Path filePath = storageLocal(file);
             ProductImage productImage = new ProductImage();
-            String updatePath = "products"+ "/" + product.getId().toString();
             productImage.setPath(updatePath);
             productImage.setProduct(product);
+            productImage.setContentType(file.getContentType());
             ProductImage productImage1 = productImageRepository.save(productImage);
-
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
             String filename = productImage1.getId() + "."+content;
             String url = fileStorageDataProvider.uploadFile(updatePath, filename, file.getInputStream(), file.getContentType());
             productImage1.setImageUrl(url);
             productImage1.setPath(updatePath);
             Files.delete(filePath);
-
             return productImage1;
         } catch (Exception e) {
             throw new AppException("Error when update files");

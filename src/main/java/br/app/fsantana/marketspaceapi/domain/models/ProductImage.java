@@ -1,7 +1,9 @@
 package br.app.fsantana.marketspaceapi.domain.models;
 
+import br.app.fsantana.marketspaceapi.infra.dataproviders.ProductImageDataProviderEventListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +27,7 @@ import java.util.UUID;
  */
 @Entity
 @Table(name =  "products_images")
+@EntityListeners(ProductImageDataProviderEventListener.class)
 @Getter
 @Setter
 @AllArgsConstructor
@@ -46,6 +49,9 @@ public class ProductImage {
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
+    @Column(name = "content_type")
+    private String contentType;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private OffsetDateTime createdAt;
@@ -53,4 +59,5 @@ public class ProductImage {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
+
 }
