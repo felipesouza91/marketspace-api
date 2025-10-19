@@ -46,7 +46,7 @@ public class MeController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProducts() {
+    public ResponseEntity<Set<MeProductResponse>> getProducts() {
         Set<Product> products = meService.findMyProducts();
         Set<MeProductResponse> results = products.stream()
                 .map(userMapper::toMeProductResponse).collect(Collectors.toSet());
