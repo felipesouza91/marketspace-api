@@ -1,6 +1,6 @@
 package br.app.fsantana.marketspaceapi.infra.impl;
 
-import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppFileException;
 import br.app.fsantana.marketspaceapi.infra.configs.storage.minio.MinioProperties;
 import io.minio.BucketExistsArgs;
@@ -26,7 +26,7 @@ import java.io.InputStream;
 @Service
 @Profile("minio")
 @RequiredArgsConstructor
-public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvider {
+public class MinioFiletStorageDataProviderImpl implements StorageDataProvider {
 
     private final MinioClient minioClient;
     private final MinioProperties properties;
@@ -44,7 +44,7 @@ public class MinioFiletStorageDataProviderImpl implements FileStorageDataProvide
                                     inputStream, inputStream.available(), -1)
                             .contentType(contentType)
                             .build());
-            return getFileUrl(properties.getBucketName(), finalFile );
+            return getFileUrl(path, fileName );
         } catch (Exception e) {
             log.error(e);
             throw new AppFileException("Erro during upload");
