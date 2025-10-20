@@ -16,11 +16,8 @@ public class ProductImageResponse {
 
     private UUID id;
 
-    private String path;
-
     private String imageUrl;
 
     private OffsetDateTime createdAt;
 
-    private OffsetDateTime updatedAt;
 }

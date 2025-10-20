@@ -1,12 +1,12 @@
 package br.app.fsantana.marketspaceapi.domain.services.impl;
 
-import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.FileRepository;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductDataProvider;
-import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductImageRepository;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
+import br.app.fsantana.marketspaceapi.domain.models.File;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
-import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
@@ -35,46 +35,52 @@ public class ProductImageServiceImpl implements ProductImageService {
     private final StorageDataProvider storageDataProvider;
     private final ProductDataProvider productDataProvider;
     private final UserSessionService userSessionService;
-    private final ProductImageRepository productImageRepository;
+    private final FileRepository fileRepository;
 
     @Override
-    public Set<ProductImage> saveAll(UUID productId, List<MultipartFile> files) {
+    public Set<File> saveAll(UUID productId, List<MultipartFile> files) {
         Product product = productDataProvider.findByIdAndUserId(productId, getCurrentUser().getId())
                 .orElseThrow(() -> new AppEntityNotFound("Product Image invalid"));
-        Set<ProductImage> images = files.stream().map(item -> saveImage(product, item)).collect(Collectors.toSet());
+        Set<File> images = files.stream().map(item -> saveImage(product, item)).collect(Collectors.toSet());
+
+        product.getProductImages().addAll(images);
+        productDataProvider.save(product);
         return images;
     }
 
     @Override
     public void deleteImage(UUID productId, UUID imageId) {
-        ProductImage productImage = productImageRepository
-                .findByIdAndProductIdAndProductUserId(imageId, productId, getCurrentUser().getId())
+        File productImage = productDataProvider
+                .findFileByProductAndUserId(imageId, productId, getCurrentUser().getId())
                 .orElseThrow(() -> new AppEntityNotFound("Product Image not found"));
         String content = productImage.getContentType()
                 .substring(productImage.getContentType().indexOf("/") + 1);
-        storageDataProvider.deleteFile(productImage.getPath(), productImage.getId() +"."+ content);
-        productImageRepository.deleteById(imageId);
+        storageDataProvider.deleteFile(productImage.getPath(), productImage.getFileName() +"."+ content);
+        fileRepository.deleteById(imageId);
     }
 
 
-    private ProductImage saveImage(Product product, MultipartFile file) {
+    private File saveImage(Product product, MultipartFile file) {
         String updatePath = "products"+ "/" + product.getId().toString();
 
         try {
-            Path filePath = storageLocal(file);
-            ProductImage productImage = new ProductImage();
-            productImage.setPath(updatePath);
-            productImage.setProduct(product);
-            productImage.setContentType(file.getContentType());
-            ProductImage productImage1 = productImageRepository.save(productImage);
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
-            String filename = productImage1.getId() + "."+content;
-            String url = storageDataProvider.uploadFile(updatePath, filename, file.getInputStream(), file.getContentType());
-            productImage1.setImageUrl(url);
-            productImage1.setPath(updatePath);
+
+            Path filePath = storageLocal(file);
+            File newFile = File.builder()
+                    .path(updatePath)
+                    .fileName(UUID.randomUUID().toString()+ "." + content )
+                    .originalFileName(file.getOriginalFilename())
+                    .contentType(file.getContentType())
+                    .build();
+
+            fileRepository.save(newFile);
+            String url = storageDataProvider.uploadFile(updatePath, newFile.getFileName(), file.getInputStream(), file.getContentType());
+            newFile.setImageUrl(url);
             Files.delete(filePath);
-            return productImage1;
+            return newFile;
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new AppException("Error when update files");
         }
     }

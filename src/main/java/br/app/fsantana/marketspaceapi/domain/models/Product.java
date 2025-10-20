@@ -74,8 +74,13 @@ public class Product {
     )
     private Set<PaymentMethod> paymentMethods;
 
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "product")
-    private Set<ProductImage> productImages;
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "products_images",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn( name = "file_id")
+    )
+    private Set<File> productImages;
 
     @Column(name = "created_at")
     @CreationTimestamp

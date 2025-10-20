@@ -1,7 +1,7 @@
 package br.app.fsantana.marketspaceapi.utils.mappers;
 
 import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
-import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
+import br.app.fsantana.marketspaceapi.domain.models.File;
 import org.mapstruct.Mapper;
 
 /**
@@ -12,5 +12,5 @@ import org.mapstruct.Mapper;
 public interface ProductImageMapper {
 
 
-    ProductImageResponse toResponseImage(ProductImage image);
+    ProductImageResponse toResponseImage(File image);
 }

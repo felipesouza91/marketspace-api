@@ -2,12 +2,10 @@ package br.app.fsantana.marketspaceapi.utils.mappers;
 
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductUpdateRequest;
-import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.PaymentMethod;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
-import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

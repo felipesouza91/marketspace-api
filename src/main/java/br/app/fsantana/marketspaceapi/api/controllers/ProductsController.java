@@ -1,26 +1,17 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
-import br.app.fsantana.marketspaceapi.api.requests.DeleteImageRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductActiveUpdateRequest;
-import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
+import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductUpdateRequest;
-import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
-import br.app.fsantana.marketspaceapi.api.responses.ProductImageResumeResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
-import br.app.fsantana.marketspaceapi.domain.models.ProductImage;
-import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
-import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductMapper;
-import br.app.fsantana.marketspaceapi.utils.validations.FileType;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,12 +22,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Created by felip on 12/10/2025.
