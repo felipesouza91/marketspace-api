@@ -23,6 +23,7 @@ public interface ProductMapper {
     Product toModel(ProductUpdateRequest productRequest);
 
     @Mapping(source = "productImages", target = "images")
+    @Mapping(source = "user.avatar.imageUrl", target = "user.avatar")
     ProductResponse toResponse(Product product);
 
     ProductResumeResponse toResponseResume(Product product);

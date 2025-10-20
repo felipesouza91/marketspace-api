@@ -52,8 +52,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "avatar")
-    private String avatar;
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "avatar_id", referencedColumnName = "id")
+    private File avatar;
 
     @OneToOne(mappedBy = "user", orphanRemoval = true)
     private RefreshToken refreshToken;

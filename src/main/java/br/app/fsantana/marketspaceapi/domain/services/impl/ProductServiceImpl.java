@@ -1,7 +1,7 @@
 package br.app.fsantana.marketspaceapi.domain.services.impl;
 
 import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
-import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.PaymentModelRepository;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.specifications.ProductSpecs;
@@ -32,7 +32,7 @@ public class ProductServiceImpl implements ProductService  {
     private final ProductDataProvider repository;
     private final PaymentModelRepository paymentModelRepository;
     private final UserSessionService userSessionService;
-    private final FileStorageDataProvider fileStorageDataProvider;
+    private final StorageDataProvider storageDataProvider;
 
     @Override
     public Product save(Product product) {
@@ -101,7 +101,7 @@ public class ProductServiceImpl implements ProductService  {
         product.getProductImages()
                 .forEach(item -> {
                     String substring = item.getContentType().substring(item.getContentType().indexOf("/") + 1);
-                    fileStorageDataProvider.deleteFile(item.getPath(), item.getId().toString() + "."+ substring);
+                    storageDataProvider.deleteFile(item.getPath(), item.getId().toString() + "."+ substring);
                 });
 
         repository.deleteById(id);

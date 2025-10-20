@@ -17,6 +17,7 @@ public interface UserMapper {
 
     User toModel(UserCreateRequest request);
 
+    @Mapping(source = "avatar.imageUrl", target = "avatar")
     MeResponse toMeResponse(User user);
 
     @Mapping(source = "productImages", target = "images")

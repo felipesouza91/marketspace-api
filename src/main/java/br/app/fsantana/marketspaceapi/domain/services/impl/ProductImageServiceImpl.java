@@ -1,6 +1,6 @@
 package br.app.fsantana.marketspaceapi.domain.services.impl;
 
-import br.app.fsantana.marketspaceapi.domain.dataprovider.FileStorageDataProvider;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductImageRepository;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductImageServiceImpl implements ProductImageService {
 
-    private final FileStorageDataProvider fileStorageDataProvider;
+    private final StorageDataProvider storageDataProvider;
     private final ProductDataProvider productDataProvider;
     private final UserSessionService userSessionService;
     private final ProductImageRepository productImageRepository;
@@ -52,7 +52,7 @@ public class ProductImageServiceImpl implements ProductImageService {
                 .orElseThrow(() -> new AppEntityNotFound("Product Image not found"));
         String content = productImage.getContentType()
                 .substring(productImage.getContentType().indexOf("/") + 1);
-        fileStorageDataProvider.deleteFile(productImage.getPath(), productImage.getId() +"."+ content);
+        storageDataProvider.deleteFile(productImage.getPath(), productImage.getId() +"."+ content);
         productImageRepository.deleteById(imageId);
     }
 
@@ -69,7 +69,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             ProductImage productImage1 = productImageRepository.save(productImage);
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
             String filename = productImage1.getId() + "."+content;
-            String url = fileStorageDataProvider.uploadFile(updatePath, filename, file.getInputStream(), file.getContentType());
+            String url = storageDataProvider.uploadFile(updatePath, filename, file.getInputStream(), file.getContentType());
             productImage1.setImageUrl(url);
             productImage1.setPath(updatePath);
             Files.delete(filePath);

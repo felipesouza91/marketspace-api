@@ -1,36 +1,38 @@
 package br.app.fsantana.marketspaceapi.domain.models;
 
+import br.app.fsantana.marketspaceapi.infra.dataproviders.FileDataProviderEventListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
- * Created by felip on 12/10/2025.
+ * Created by felip on 20/10/2025.
  */
 @Entity
-@Table(name =  "products_images")
+@Table(name =  "files")
+@EntityListeners(FileDataProviderEventListener.class)
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode( onlyExplicitlyIncluded = true)
-public class ProductImage {
+public class File {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -39,12 +41,11 @@ public class ProductImage {
 
     private String path;
 
-    @Transient
-    private String imageUrl;
+    @Column(name = "file_name")
+    private String fileName;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
-    private Product product;
+    @Column(name = "original_file_name")
+    private String originalFileName;
 
     @Column(name = "content_type")
     private String contentType;
@@ -53,8 +54,6 @@ public class ProductImage {
     @CreationTimestamp
     private OffsetDateTime createdAt;
 
-    @Column(name = "updated_at")
-    @UpdateTimestamp
-    private OffsetDateTime updatedAt;
-
+    @Transient
+    private String imageUrl;
 }
