@@ -25,9 +25,9 @@ INSERT INTO payments_methods(KEY,NAME)
 CREATE TABLE "payments_methods_to_products" (
     "payment_methods_id" UUID NOT NULL ,
     "product_id" UUID NOT NULL ,
-    CONSTRAINT "payments_methods_to_products_A_fkey" FOREIGN KEY ("payment_methods_id")
+    CONSTRAINT "payments_methods_to_payments_methods_fk" FOREIGN KEY ("payment_methods_id")
         REFERENCES "payments_methods" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT "payments_methods_to_products_B_fkey" FOREIGN KEY ("product_id")
+    CONSTRAINT "payments_methods_to_products_products_fk" FOREIGN KEY ("product_id")
         REFERENCES "products" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "payments_methods_to_products_pk" PRIMARY KEY ("payment_methods_id", "product_id")
 );

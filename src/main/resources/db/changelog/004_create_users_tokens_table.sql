@@ -4,5 +4,6 @@ CREATE TABLE "users_tokens" (
     "expires_in" INTEGER NOT NULL,
     "user_id" UUID NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "UsersTokens_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "users_tokens_users_id_fk" FOREIGN KEY ("user_id")
+        REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

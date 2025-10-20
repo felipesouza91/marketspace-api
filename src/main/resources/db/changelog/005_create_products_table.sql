@@ -9,6 +9,7 @@ CREATE TABLE "products" (
     "is_active" BOOLEAN NOT NULL DEFAULT true,
     "created_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT "Products_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "products_user_id_fk" FOREIGN KEY ("user_id")
+        REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
