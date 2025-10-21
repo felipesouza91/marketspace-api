@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
+import br.app.fsantana.marketspaceapi.api.controllers.docs.ProductImageControllerOpenApi;
 import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
 import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
@@ -29,8 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/products/{productId}")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "security_auth")
-public class ProductImagesController {
+public class ProductImagesController implements ProductImageControllerOpenApi {
 
     private final ProductService productService;
     private final ProductImageService productImageService;

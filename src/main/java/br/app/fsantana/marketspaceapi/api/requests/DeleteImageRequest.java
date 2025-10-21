@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.api.requests;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +15,6 @@ import java.util.UUID;
 @Setter
 public class DeleteImageRequest {
 
+    @NotNull
     private Set<UUID> imagesIds;
 }

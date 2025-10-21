@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
+import br.app.fsantana.marketspaceapi.api.controllers.docs.MeControllerOpenApi;
 import br.app.fsantana.marketspaceapi.api.responses.MeProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.MeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
@@ -30,9 +31,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/me")
-@SecurityRequirement(name = "security_auth")
 @RequiredArgsConstructor
-public class MeController {
+public class MeController implements MeControllerOpenApi  {
 
     private final MeService meService;
     private final UserMapper userMapper;

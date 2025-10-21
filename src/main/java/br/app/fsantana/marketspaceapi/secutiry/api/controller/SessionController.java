@@ -1,6 +1,7 @@
 package br.app.fsantana.marketspaceapi.secutiry.api.controller;
 
 import br.app.fsantana.marketspaceapi.domain.models.User;
+import br.app.fsantana.marketspaceapi.secutiry.api.controller.docs.SessionControllerOpenApi;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.AuthRequest;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.RefreshTokenRequest;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.UserCreateRequest;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class SessionController {
+public class SessionController implements SessionControllerOpenApi  {
 
     private final SessionService sessionService;
     private final UserMapper userMapper;

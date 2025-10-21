@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
+import br.app.fsantana.marketspaceapi.api.controllers.docs.ProductControllerOpenApi;
 import br.app.fsantana.marketspaceapi.api.requests.ProductActiveUpdateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
@@ -33,8 +34,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "security_auth")
-public class ProductsController {
+public class ProductsController implements ProductControllerOpenApi {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
