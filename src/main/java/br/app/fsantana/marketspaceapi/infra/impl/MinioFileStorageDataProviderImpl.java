@@ -26,7 +26,7 @@ import java.io.InputStream;
 @Service
 @Profile("minio")
 @RequiredArgsConstructor
-public class MinioFiletStorageDataProviderImpl implements StorageDataProvider {
+public class MinioFileStorageDataProviderImpl implements StorageDataProvider {
 
     private final MinioClient minioClient;
     private final MinioProperties properties;
