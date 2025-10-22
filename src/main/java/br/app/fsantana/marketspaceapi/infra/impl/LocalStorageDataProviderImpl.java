@@ -1,9 +1,9 @@
 package br.app.fsantana.marketspaceapi.infra.impl;
 
-import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppFileException;
 import br.app.fsantana.marketspaceapi.infra.configs.storage.local.LocalProperties;
+import br.app.fsantana.marketspaceapi.infra.dataproviders.LocalStorageDataProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 /**
@@ -21,13 +22,18 @@ import java.nio.file.StandardCopyOption;
 @Service
 @Profile("local-storage")
 @RequiredArgsConstructor
-public class LocalStorageDataProviderImpl implements StorageDataProvider {
+public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
 
     private final LocalProperties localProperties;
 
     @Override
     public String uploadFile(String path, String fileName, InputStream inputStream, String contentType) {
         try {
+            Path uploadPath = Paths.get(localProperties.getPath(), path);
+
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
             Path saved = Path.of(localProperties.getPath(), path, fileName);
 
             Files.copy(inputStream, saved, StandardCopyOption.REPLACE_EXISTING);
@@ -48,7 +54,7 @@ public class LocalStorageDataProviderImpl implements StorageDataProvider {
     public String getFileUrl(String path, String fileName) {
         Path finalPath = Path.of(localProperties.getPath(), path, fileName);
         if (fileExits(path, fileName)) {
-            return finalPath.toString();
+            return String.format("%s/files/%s",localProperties.getApiUrl(), fileName);
         }
         throw new AppFileException("File not found");
     }
@@ -62,5 +68,14 @@ public class LocalStorageDataProviderImpl implements StorageDataProvider {
             throw new AppFileException("File not found");
         }
 
+    }
+
+    @Override
+    public byte[] loadImage(String path) {
+        try {
+            return Files.readAllBytes(Path.of(localProperties.getPath(), path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
