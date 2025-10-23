@@ -8,7 +8,6 @@ import br.app.fsantana.marketspaceapi.domain.models.PaymentMethod;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 /**
  * Created by felip on 12/10/2025.
@@ -21,6 +20,8 @@ public interface ProductMapper {
 
     Product toModel(ProductUpdateRequest productRequest);
 
+    @Mapping(source = "productImages", target = "images")
+    @Mapping(source = "user.avatar.imageUrl", target = "user.avatar")
     ProductResponse toResponse(Product product);
 
     ProductResumeResponse toResponseResume(Product product);

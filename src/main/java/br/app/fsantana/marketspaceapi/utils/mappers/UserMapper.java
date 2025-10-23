@@ -6,6 +6,7 @@ import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.UserCreateRequest;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Created by felip on 12/10/2025.
@@ -16,7 +17,9 @@ public interface UserMapper {
 
     User toModel(UserCreateRequest request);
 
+    @Mapping(source = "avatar.imageUrl", target = "avatar")
     MeResponse toMeResponse(User user);
 
+    @Mapping(source = "productImages", target = "images")
     MeProductResponse toMeProductResponse(Product product);
 }

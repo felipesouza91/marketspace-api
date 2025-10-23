@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.api.requests;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,5 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductActiveUpdateRequest {
+
+    @NotNull
     private Boolean isActive;
 }

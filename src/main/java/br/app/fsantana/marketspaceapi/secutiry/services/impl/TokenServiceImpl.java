@@ -1,6 +1,7 @@
 package br.app.fsantana.marketspaceapi.secutiry.services.impl;
 
 import br.app.fsantana.marketspaceapi.domain.models.User;
+import br.app.fsantana.marketspaceapi.secutiry.config.SecurityProperties;
 import br.app.fsantana.marketspaceapi.secutiry.services.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -9,7 +10,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -28,11 +28,7 @@ import java.util.function.Function;
 public class TokenServiceImpl implements TokenService {
 
 
-    @Value("${api.security.token.secret}")
-    private String secretKey;
-
-    @Value("${api.security.token.expiration-time}")
-    private long jwtExpiration;
+    private final SecurityProperties properties;
 
     @Override
     public String extractUserId(String token) {
@@ -52,12 +48,12 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String generateToken(Map<String, Object> extraClaims, User userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+        return buildToken(extraClaims, userDetails, getExpirationTime() );
     }
 
     @Override
     public long getExpirationTime() {
-        return jwtExpiration;
+        return properties.getToken().getExpirationTime();
     }
 
     @Override
@@ -84,7 +80,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        byte[] keyBytes = Decoders.BASE64.decode(properties.getToken().getSecret());
         return Keys.hmacShaKeyFor(keyBytes);
     }
 

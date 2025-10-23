@@ -7,7 +7,7 @@ import br.app.fsantana.marketspaceapi.domain.services.RefreshTokenService;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.SessionService;
 import br.app.fsantana.marketspaceapi.secutiry.services.TokenService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppRuleException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

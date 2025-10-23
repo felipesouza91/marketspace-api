@@ -6,7 +6,7 @@ import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.MeService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

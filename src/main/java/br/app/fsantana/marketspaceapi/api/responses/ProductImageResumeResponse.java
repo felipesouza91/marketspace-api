@@ -13,5 +13,5 @@ import java.util.UUID;
 @Setter
 public class ProductImageResumeResponse {
     private UUID id;
-    private String path;
+    private String imageUrl;
 }

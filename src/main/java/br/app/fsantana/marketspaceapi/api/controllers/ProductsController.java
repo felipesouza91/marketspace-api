@@ -1,8 +1,9 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
+import br.app.fsantana.marketspaceapi.api.controllers.docs.ProductControllerOpenApi;
 import br.app.fsantana.marketspaceapi.api.requests.ProductActiveUpdateRequest;
-import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductCreateRequest;
+import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.api.requests.ProductUpdateRequest;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
@@ -33,8 +34,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "security_auth")
-public class ProductsController {
+public class ProductsController implements ProductControllerOpenApi {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
@@ -48,32 +48,34 @@ public class ProductsController {
     }
 
     @GetMapping("/{id}")
-    private ResponseEntity<ProductResponse> getById(@PathVariable UUID id) {
+    public ResponseEntity<ProductResponse> getById(@PathVariable UUID id) {
        Product product =  productService.findById(id);
        return ResponseEntity.ok(productMapper.toResponse(product));
     }
 
     @GetMapping
-    private ResponseEntity<List<ProductResumeResponse>> getAll(ProductFilterRequest requestFilter) {
+    public ResponseEntity<List<ProductResumeResponse>> getAll(ProductFilterRequest requestFilter) {
       List<Product> result =  productService.findByFilters(requestFilter);
       return ResponseEntity.ok(result.stream().map(productMapper::toResponseResume).toList());
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<ProductResponse> updateById(@PathVariable UUID id, @RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<ProductResponse> updateById(@PathVariable UUID id, @RequestBody ProductUpdateRequest request) {
         Product updated = productService.updateById(id, productMapper.toModel(request));
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
 
     @PatchMapping("/{id}")
-    private ResponseEntity<ProductResponse> patchById(@PathVariable UUID id, @RequestBody ProductActiveUpdateRequest request) {
+    public ResponseEntity<ProductResponse> patchById(@PathVariable UUID id, @RequestBody ProductActiveUpdateRequest request) {
         Product updated = productService.changeActiveState(id, request.getIsActive());
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
 
     @DeleteMapping("/{id}")
-    private ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         productService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+
+
 }

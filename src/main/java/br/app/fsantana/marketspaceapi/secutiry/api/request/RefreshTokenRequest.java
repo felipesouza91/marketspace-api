@@ -1,5 +1,7 @@
 package br.app.fsantana.marketspaceapi.secutiry.api.request;
 
+import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +13,9 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 public class RefreshTokenRequest {
 
+    @NotBlank
     private UUID refreshToken;
 }
