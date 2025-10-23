@@ -29,6 +29,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         newRefreshToken.setUser(user);
         newRefreshToken.setExpiresIn(OffsetDateTime.now().plusDays(2).toEpochSecond());
         user.setRefreshToken(null);
+        userDataProvider.save(user);
         return refreshTokenDataProvider.save(newRefreshToken);
     }
 

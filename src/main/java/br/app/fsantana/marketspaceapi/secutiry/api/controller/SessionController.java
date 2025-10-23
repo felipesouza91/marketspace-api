@@ -35,15 +35,9 @@ public class SessionController implements SessionControllerOpenApi  {
 
     @PostMapping("/signup")
     public ResponseEntity<?> createUser(@RequestBody UserCreateRequest request) {
-        try {
-            User user = userMapper.toModel(request);
-            sessionService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (AppRuleException e ) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e ) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        User user = userMapper.toModel(request);
+        sessionService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/token")

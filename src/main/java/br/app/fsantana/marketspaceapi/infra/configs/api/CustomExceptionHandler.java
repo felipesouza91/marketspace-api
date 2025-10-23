@@ -1,5 +1,6 @@
 package br.app.fsantana.marketspaceapi.infra.configs.api;
 
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.FieldProblem;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.ProblemType;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
@@ -49,8 +50,16 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), statusCode, request);
   }
 
+    @ExceptionHandler(AppRuleException.class)
+    public ResponseEntity<?> handleAppRuleException(AppRuleException ex, WebRequest request) {
+        HttpStatusCode statusCode = HttpStatus.BAD_REQUEST;
+        ProblemDetail problemDetail = this.createProblemDetail(statusCode,
+                ProblemType.ERRO_NEGOCIO.getTitle(), ex.getMessage(), null);
+        return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), statusCode, request);
+    }
 
-  /**
+
+    /**
    * AppSecurityException handle.
    */
   @ExceptionHandler({AppSecurityException.class , BadCredentialsException.class})
