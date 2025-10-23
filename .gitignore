@@ -9,6 +9,7 @@ uploads
 filesdata
 
 **/application-*.yaml
+!**/application-test.yaml
 ### STS ###
 .apt_generated
 .classpath
