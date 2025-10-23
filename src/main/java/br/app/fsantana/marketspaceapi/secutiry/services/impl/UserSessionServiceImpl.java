@@ -22,6 +22,7 @@ public class UserSessionServiceImpl implements UserSessionService {
     private final UserDataProvider userDataProvider;
     private User user;
 
+
     @Override
     public User getCurrentUser() {
         Auth authentication = (Auth)  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
