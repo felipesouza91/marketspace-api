@@ -30,6 +30,7 @@
 		<minio.version>8.5.17</minio.version>
 		<testcontainers.version>1.20.3</testcontainers.version>
 		<rest-assured.version>5.5.0</rest-assured.version>
+        <sonar.organization>felipesouza91</sonar.organization>
 	</properties>
 	<dependencies>
 
