@@ -17,11 +17,11 @@ spring:
 api:
   security:
     token:
-      secret: ${{ secrets.TOKEN_TEST }}
-      expiration-time: 60 # 1h in minuts
+      secret: ${TOKEN_SECRET}
+      expiration-time: ${TOKEN_EXPIRATION_TIME:60}
   storage:
     minio:
-      bucketName: ${{ secrets.MINIO_BUCKET_TEST }}
-      url: ${{ secrets.MINIO_URL_TEST }}
-      accessKey: ${{ secrets.MINIO_ACCESSEY_TEST }}
-      accessSecret: ${{ secrets.MINIO_ACCESSSECRET_TEST }}
+      bucketName: ${BUCKET_NAME}
+      url: ${MINIO_URL}
+      accessKey: ${MINIO_ACCESS_KEY}
+      accessSecret: ${MINIO_ACCESS_SECRET}
