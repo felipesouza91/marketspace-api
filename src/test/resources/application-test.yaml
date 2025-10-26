@@ -17,11 +17,11 @@ spring:
 api:
   security:
     token:
-      secret: ${TOKEN_SECRET}
+      secret: ${TOKEN_SECRET:ZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NQ==}
       expiration-time: ${TOKEN_EXPIRATION_TIME:60}
   storage:
     minio:
-      bucketName: ${BUCKET_NAME}
-      url: ${MINIO_URL}
-      accessKey: ${MINIO_ACCESS_KEY}
-      accessSecret: ${MINIO_ACCESS_SECRET}
+      bucketName: ${BUCKET_NAME:marketstore}
+      url: ${MINIO_URL:http://localhost:9000}
+      accessKey: ${MINIO_ACCESS_KEY:Zw0npb3JKMOCTF2gmkqW}
+      accessSecret: ${MINIO_ACCESS_SECRET:S5Kek7cQkIl7Vv31EPWzYIo3JIz9OQ1gIBGPblUu}
