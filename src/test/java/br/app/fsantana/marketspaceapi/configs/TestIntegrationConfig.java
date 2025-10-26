@@ -1,10 +1,16 @@
 package br.app.fsantana.marketspaceapi.configs;
 
+import br.app.fsantana.marketspaceapi.domain.dataprovider.PaymentMethodRepository;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.models.PaymentMethod;
+import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.SessionService;
 import io.restassured.RestAssured;
+import org.instancio.Instancio;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,11 +19,14 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.Optional;
+
+import static org.instancio.Select.field;
 
 @Testcontainers
 @ActiveProfiles({"minio", "test"})
@@ -31,7 +40,7 @@ public abstract class TestIntegrationConfig {
 
     @BeforeEach
     void setUp() {
-    RestAssured.port = port;
+        RestAssured.port = port;
   }
 
     @Autowired
@@ -39,6 +48,12 @@ public abstract class TestIntegrationConfig {
 
     @Autowired
     private UserDataProvider userDataProvider;
+
+    @Autowired
+    private ProductDataProvider productDataProvider;
+
+    @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
 
     @Container
     @ServiceConnection
@@ -63,6 +78,23 @@ public abstract class TestIntegrationConfig {
     protected Auth token() {
         User user = createUser();
         return sessionService.auth(user.getEmail(), user.getPassword());
+    }
+
+    @Transactional
+    protected Product createProduct(User user) {
+        PaymentMethod pix = paymentMethodRepository.findByKey("pix")
+                .orElseThrow(() -> new AppEntityNotFound("Entity not found"));
+        Product product = Instancio.of(Product.class)
+                .setBlank(field(Product::getId))
+                .setBlank(field(Product::getUser))
+                .setBlank(field(Product::getPaymentMethods))
+                .setBlank(field(Product::getUser))
+                .setBlank(field(Product::getPaymentMethods))
+                .setBlank(field(Product::getProductImages))
+                .create();
+        product.setUser(user);
+        product.getPaymentMethods().add(pix);
+        return productDataProvider.saveAndFlush(product);
     }
 
 }
