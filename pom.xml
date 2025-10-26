@@ -30,6 +30,7 @@
 		<minio.version>8.5.17</minio.version>
 		<testcontainers.version>1.20.3</testcontainers.version>
 		<rest-assured.version>5.5.0</rest-assured.version>
+        <instancio.version>5.5.1</instancio.version>
         <sonar.organization>felipesouza91</sonar.organization>
 	</properties>
 	<dependencies>
@@ -126,6 +127,12 @@
 			<version>${rest-assured.version}</version>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.instancio</groupId>
+            <artifactId>instancio-junit</artifactId>
+            <version>${instancio.version}</version>
+            <scope>test</scope>
+        </dependency>
 	</dependencies>
 
 	<build>
