@@ -1,4 +1,4 @@
-package br.app.fsantana.marketspaceapi.integrations;
+package br.app.fsantana.marketspaceapi.api.controllers;
 
 import br.app.fsantana.marketspaceapi.configs.TestIntegrationConfig;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
