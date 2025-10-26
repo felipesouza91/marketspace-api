@@ -18,11 +18,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -66,14 +68,17 @@ public class Product {
     @Column(name = "is_active" )
     private Boolean isActive = Boolean.TRUE;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
+    @OneToMany
     @JoinTable(
             name = "payments_methods_to_products",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn( name = "payment_methods_id")
-    )
-    private Set<PaymentMethod> paymentMethods;
 
+    )
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
+
+    @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "products_images",

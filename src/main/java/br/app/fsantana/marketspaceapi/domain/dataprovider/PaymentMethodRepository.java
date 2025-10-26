@@ -10,6 +10,6 @@ import java.util.UUID;
  * Created by felip on 12/10/2025.
  */
 
-public interface PaymentModelRepository extends JpaRepository<PaymentMethod, UUID> {
+public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, UUID> {
     Optional<PaymentMethod> findByKey(String key);
 }

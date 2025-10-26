@@ -2,7 +2,7 @@ package br.app.fsantana.marketspaceapi.domain.services.impl;
 
 import br.app.fsantana.marketspaceapi.api.requests.ProductFilterRequest;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.StorageDataProvider;
-import br.app.fsantana.marketspaceapi.domain.dataprovider.PaymentModelRepository;
+import br.app.fsantana.marketspaceapi.domain.dataprovider.PaymentMethodRepository;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.ProductDataProvider;
 import br.app.fsantana.marketspaceapi.domain.dataprovider.specifications.ProductSpecs;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService  {
 
     private final ProductDataProvider repository;
-    private final PaymentModelRepository paymentModelRepository;
+    private final PaymentMethodRepository paymentMethodRepository;
     private final UserSessionService userSessionService;
     private final StorageDataProvider storageDataProvider;
 
@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService  {
 
         Set<PaymentMethod> payments = product.getPaymentMethods()
                 .stream()
-                .map(paymentMethod -> paymentModelRepository
+                .map(paymentMethod -> paymentMethodRepository
                         .findByKey(paymentMethod.getKey())
                         .orElseThrow(() -> new AppRuleException("PaymentMethod invalid")) )
                 .collect(Collectors.toSet());
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService  {
     public Product updateById(UUID id, Product model) {
 
         Set<PaymentMethod> newsPayments = model.getPaymentMethods()
-                .stream().map(paymentMethod -> paymentModelRepository.findByKey(paymentMethod.getKey())
+                .stream().map(paymentMethod -> paymentMethodRepository.findByKey(paymentMethod.getKey())
                 .orElseThrow(() -> new AppRuleException("PaymentMethod invalid"))).collect(Collectors.toSet());
 
         Product productSaved = repository.findByIdAndUserId(id, getUser().getId())

@@ -39,11 +39,4 @@ public class PaymentMethod {
 
     private String name;
 
-    @ManyToMany
-    @JoinTable(
-            name = "payments_methods_to_products",
-            joinColumns = @JoinColumn(name = "payment_methods_id"),
-            inverseJoinColumns = @JoinColumn( name = "product_id")
-    )
-    private Set<Product> products;
 }
