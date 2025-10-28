@@ -47,7 +47,7 @@ public class MinioFileStorageDataProviderImpl implements StorageDataProvider {
             return getFileUrl(path, fileName );
         } catch (Exception e) {
             log.error(e);
-            throw new AppFileException("Erro during upload");
+            throw new AppFileException("Erro during upload", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class MinioFileStorageDataProviderImpl implements StorageDataProvider {
                             .method(Method.GET)
                     .build());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new AppFileException("Generate url fail",e);
         }
     }
 
@@ -85,7 +85,7 @@ public class MinioFileStorageDataProviderImpl implements StorageDataProvider {
                     .object(getNameWithPath(path, fileName))
                     .build());
         } catch (Exception e) {
-            throw new AppFileException("Erro during upload");
+            throw new AppFileException("Erro during upload", e);
         }
 
     }

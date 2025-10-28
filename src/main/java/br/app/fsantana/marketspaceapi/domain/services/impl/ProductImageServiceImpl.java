@@ -81,7 +81,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             return newFile;
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new AppException("Error when update files");
+            throw new AppException("Error when update files", e);
         }
     }
 

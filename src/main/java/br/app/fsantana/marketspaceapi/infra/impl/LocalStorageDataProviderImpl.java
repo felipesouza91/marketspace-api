@@ -39,7 +39,7 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
             Files.copy(inputStream, saved, StandardCopyOption.REPLACE_EXISTING);
             return saved.toString();
         } catch (Exception e) {
-            throw new AppException("Erro when update files");
+            throw new AppException("Erro when update files",e);
         }
     }
 
@@ -65,7 +65,7 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
         try {
             Files.delete(finalPath);
         } catch (IOException e) {
-            throw new AppFileException("File not found");
+            throw new AppFileException("File not found", e );
         }
 
     }
@@ -75,7 +75,7 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
         try {
             return Files.readAllBytes(Path.of(localProperties.getPath(), path));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AppFileException("Load file error",e);
         }
     }
 }
