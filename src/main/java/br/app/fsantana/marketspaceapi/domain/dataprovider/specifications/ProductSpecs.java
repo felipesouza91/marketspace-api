@@ -37,14 +37,10 @@ public class ProductSpecs {
         if( Objects.isNull(filters)) {
             return likePredicates.toArray(Predicate[]::new);
         }
-        if (Objects.isNull(filters.getIsNew())) {
-            likePredicates.add(criteriaBuilder.equal(root.get("isNew"), true));
-        } else {
+        if (!Objects.isNull(filters.getIsNew())) {
             likePredicates.add(criteriaBuilder.equal(root.get("isNew"), filters.getIsNew()));
         }
-        if (Objects.isNull(filters.getAcceptTrade())) {
-            likePredicates.add(criteriaBuilder.equal(root.get("acceptTrade"), true));
-        } else {
+        if (!Objects.isNull(filters.getAcceptTrade())) {
             likePredicates.add(criteriaBuilder.equal(root.get("acceptTrade"), filters.getAcceptTrade()));
         }
         if (!Objects.isNull(filters.getPaymentMethods())) {
