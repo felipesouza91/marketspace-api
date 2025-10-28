@@ -124,4 +124,23 @@ public class SessionControllerIT  extends TestIntegrationConfig {
                 .statusCode(400)
                 .body("detail", is("Invalid data try again with new datas"));
     }
+
+    @Test
+    @DisplayName("should return 404 when refresh token not exists")
+    public  void test5() {
+
+        RefreshTokenRequest body = RefreshTokenRequest.builder()
+                .refreshToken(UUID.randomUUID()).build();
+
+
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/refresh-token")
+                .then()
+                .statusCode(404)
+                .body("detail", is("Refresh token not found"));
+    }
+
 }
