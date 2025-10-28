@@ -40,7 +40,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Override
     public Set<File> saveAll(UUID productId, List<MultipartFile> files) {
         Product product = productDataProvider.findByIdAndUserId(productId, getCurrentUser().getId())
-                .orElseThrow(() -> new AppEntityNotFound("Product Image invalid"));
+                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
         Set<File> images = files.stream().map(item -> saveImage(product, item)).collect(Collectors.toSet());
 
         product.getProductImages().addAll(images);
@@ -96,7 +96,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             return filePath;
         } catch (Exception e) {
-            throw new AppException("Erro when update files");
+            throw new AppException("Erro when update files", e);
         }
     }
 

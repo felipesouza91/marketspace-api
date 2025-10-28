@@ -3,10 +3,8 @@ package br.app.fsantana.marketspaceapi.api.controllers;
 import br.app.fsantana.marketspaceapi.api.controllers.docs.ProductImageControllerOpenApi;
 import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
 import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
-import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductImageMapper;
 import br.app.fsantana.marketspaceapi.utils.validations.FileType;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductImagesController implements ProductImageControllerOpenApi {
 
-    private final ProductService productService;
     private final ProductImageService productImageService;
     private final ProductImageMapper productImageMapper;
 
