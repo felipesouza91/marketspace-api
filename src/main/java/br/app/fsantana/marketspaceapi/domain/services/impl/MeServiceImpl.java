@@ -28,8 +28,7 @@ public class MeServiceImpl implements MeService {
     @Override
     public User findInfo() {
         User currentUser = getUser();
-        return userDataProvider.findById(currentUser.getId())
-                .orElseThrow(() -> new AppEntityNotFound("User not found"));
+        return userDataProvider.findById(currentUser.getId()).get();
     }
 
     @Override
