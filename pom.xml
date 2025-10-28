@@ -31,6 +31,7 @@
 		<testcontainers.version>1.20.3</testcontainers.version>
 		<rest-assured.version>5.5.0</rest-assured.version>
         <instancio.version>5.5.1</instancio.version>
+        <testcontainers.minio.version>1.20.0</testcontainers.minio.version>
         <sonar.organization>felipesouza91</sonar.organization>
 	</properties>
 	<dependencies>
@@ -115,6 +116,12 @@
 			<scope>test</scope>
 			<version>${testcontainers.version}</version>
 		</dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>minio</artifactId>
+            <version>${testcontainers.minio.version}</version>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>junit-jupiter</artifactId>
@@ -133,6 +140,7 @@
             <version>${instancio.version}</version>
             <scope>test</scope>
         </dependency>
+
 	</dependencies>
 
 	<build>
