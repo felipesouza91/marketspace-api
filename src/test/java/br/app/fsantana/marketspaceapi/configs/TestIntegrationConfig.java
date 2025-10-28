@@ -164,7 +164,7 @@ public abstract class TestIntegrationConfig {
     protected File createProductImage(Product product) {
         try {
             String updatePath = "products"+ "/" + product.getId().toString();
-            Path path = Path.of("src/test/resources/images/prod1.jpg");
+            Path path = filePath();
             java.io.File file = path.toFile();
             String content =  Files.probeContentType(path);
 
@@ -184,6 +184,10 @@ public abstract class TestIntegrationConfig {
         } catch (Exception e) {
             throw new AppException("Error when update files", e);
         }
+    }
+
+    protected Path filePath() {
+        return Path.of("src/test/resources/images/prod1.jpg");
     }
 
 }
