@@ -35,6 +35,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -183,6 +184,36 @@ public abstract class TestIntegrationConfig {
             return newFile;
         } catch (Exception e) {
             throw new AppException("Error when update files", e);
+        }
+    }
+
+    protected File userAvatar(User user) {
+        try {
+            Path path = filePath();
+            java.io.File fileData = filePath().toFile();
+
+
+            String content = Files.probeContentType(path);;
+            String avatarName = user.getId().toString() + "."+ content.substring(content.indexOf("/")+1);
+            File avatarFile = File.builder()
+                    .path("avatars")
+                    .fileName(avatarName)
+                    .originalFileName(fileData.getName())
+                    .contentType(content)
+                    .build();
+
+            File save = fileRepository.save(avatarFile);
+
+            String url = storageDataProvider.uploadFile("avatars", avatarName, new FileInputStream(fileData), content);
+
+            user.setAvatar(save);
+            userDataProvider.save(user);
+
+            Files.delete(path);
+
+            return avatarFile;
+        } catch (IOException e) {
+            throw new AppException("Erro when update files");
         }
     }
 
