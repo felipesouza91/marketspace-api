@@ -10,7 +10,7 @@ import br.app.fsantana.marketspaceapi.api.responses.ProductResumeResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductMapper;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +40,7 @@ public class ProductsController implements ProductControllerOpenApi {
     private final ProductMapper productMapper;
 
     @PostMapping
-    public ResponseEntity<ProductResponse> create(@RequestBody ProductCreateRequest input) {
+    public ResponseEntity<ProductResponse> create(@Valid  @RequestBody ProductCreateRequest input) {
         Product dataModel = productMapper.toModel(input);
         Product save = productService.save(dataModel);
         ProductResponse result = productMapper.toResponse(save);
@@ -60,13 +60,13 @@ public class ProductsController implements ProductControllerOpenApi {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponse> updateById(@PathVariable UUID id, @RequestBody ProductUpdateRequest request) {
+    public ResponseEntity<ProductResponse> updateById(@PathVariable UUID id, @Valid @RequestBody ProductUpdateRequest request) {
         Product updated = productService.updateById(id, productMapper.toModel(request));
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ProductResponse> patchById(@PathVariable UUID id, @RequestBody ProductActiveUpdateRequest request) {
+    public ResponseEntity<ProductResponse> patchById(@PathVariable UUID id,@Valid @RequestBody ProductActiveUpdateRequest request) {
         Product updated = productService.changeActiveState(id, request.getIsActive());
         return ResponseEntity.ok(productMapper.toResponse(updated));
     }
