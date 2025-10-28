@@ -3,6 +3,7 @@ package br.app.fsantana.marketspaceapi.api.controllers;
 import br.app.fsantana.marketspaceapi.configs.TestIntegrationConfig;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -81,6 +82,21 @@ public class MeControllerIT extends TestIntegrationConfig  {
                 .body("isNew", hasItem(product.getIsNew()))
                 .body("acceptTrade", hasItem(product.getAcceptTrade()))
                 .body("paymentMethods.key", notNullValue());
-        ;
+    }
+
+
+    @Test
+    @DisplayName("should update user avatar")
+    public void test4() {
+        Auth auth = token();
+        given()
+                .contentType(ContentType.MULTIPART)
+                .multiPart("file", filePath().toFile(), "image/jpg" )
+                .auth().oauth2(auth.getToken())
+                .when()
+                .post("/me/avatar")
+                .then()
+                .statusCode(200)
+                .body("fileUrl", notNullValue());
     }
 }
