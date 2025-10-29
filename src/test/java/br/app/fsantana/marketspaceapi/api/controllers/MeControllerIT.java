@@ -99,4 +99,34 @@ public class MeControllerIT extends TestIntegrationConfig  {
                 .statusCode(200)
                 .body("fileUrl", notNullValue());
     }
+
+    @Test
+    @DisplayName("should return 400 when update avatar with invalid content type")
+    public void test5() {
+        Auth auth = token();
+        given()
+                .contentType(ContentType.MULTIPART)
+                .multiPart("file", filePath().toFile(), "application/pdf" )
+                .auth().oauth2(auth.getToken())
+                .when()
+                .post("/me/avatar")
+                .then()
+                .statusCode(400)
+                .body("detail", is("Tipo de arquivo invalido"));
+    }
+
+    @Test
+    @DisplayName("should return 400 when update avatar file with size greater than 1mb")
+    public void test6() {
+        Auth auth = token();
+        given()
+                .contentType(ContentType.MULTIPART)
+                .multiPart("file", largefilePath().toFile(), "image/jpg" )
+                .auth().oauth2(auth.getToken())
+                .when()
+                .post("/me/avatar")
+                .then()
+                .statusCode(400)
+                .body("detail", is("Tamanho do arquivo inválido"));
+    }
 }
