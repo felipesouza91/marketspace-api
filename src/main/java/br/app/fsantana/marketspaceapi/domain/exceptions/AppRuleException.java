@@ -10,7 +10,4 @@ public class AppRuleException extends  RuntimeException{
         super(message);
     }
 
-    public AppRuleException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }

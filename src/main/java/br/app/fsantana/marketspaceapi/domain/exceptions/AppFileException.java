@@ -4,7 +4,7 @@ package br.app.fsantana.marketspaceapi.domain.exceptions;
  * Created by felip on 17/10/2025.
  */
 
-public class AppFileException extends RuntimeException{
+public class AppFileException extends AppEntityNotFound {
 
     public AppFileException(String message) {
         super(message);
