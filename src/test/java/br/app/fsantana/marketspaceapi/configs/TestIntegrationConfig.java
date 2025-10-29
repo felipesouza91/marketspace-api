@@ -221,4 +221,8 @@ public abstract class TestIntegrationConfig {
         return Path.of("src/test/resources/images/prod1.jpg");
     }
 
+    protected Path largefilePath() {
+        return Path.of("src/test/resources/images/large-file.jpg");
+    }
+
 }
