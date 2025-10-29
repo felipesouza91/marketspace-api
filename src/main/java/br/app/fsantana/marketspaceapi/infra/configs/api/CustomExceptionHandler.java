@@ -1,9 +1,9 @@
 package br.app.fsantana.marketspaceapi.infra.configs.api;
 
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.FieldProblem;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.ProblemType;
-import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import br.app.fsantana.marketspaceapi.utils.mappers.AppSecurityException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -29,6 +29,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.OffsetDateTime;
@@ -117,7 +118,25 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     return this.handlerInternalValidation(ex, ex.getBindingResult(), headers, status, request);
   }
 
-  @Override
+    @Override
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(
+            HandlerMethodValidationException ex, HttpHeaders headers,
+            HttpStatusCode status, WebRequest request) {
+        String detail = "";
+        if(!ex.getParameterValidationResults().isEmpty()) {
+            detail = ex.getParameterValidationResults().get(0).getResolvableErrors().getFirst().getDefaultMessage();
+        } else {
+            detail = "Um ou mais campos estão invalidos."
+                    + " Faça o preenchimento correto e tente novamente";
+        }
+
+        ProblemDetail problem = this.createProblemDetail(status, ProblemType.DADOS_INVALIDOS.getTitle(),
+                detail, null);
+
+        return this.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @Override
   @Nullable
   protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
           HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status,
