@@ -33,10 +33,11 @@ public class ProductImagesController implements ProductImageControllerOpenApi {
     private final ProductImageService productImageService;
     private final ProductImageMapper productImageMapper;
 
+    @Override
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Set<ProductImageResponse>> saveImage(
             @PathVariable UUID productId,
-            @Valid @FileType(types = {"png", "jpeg", "jpg"}) List<MultipartFile> files) {
+            @FileType(types = {"png", "jpeg", "jpg"}) List<MultipartFile> files) {
 
         Set<ProductImageResponse> collect = productImageService.saveAll(productId, files)
                 .stream().map(productImageMapper::toResponseImage)

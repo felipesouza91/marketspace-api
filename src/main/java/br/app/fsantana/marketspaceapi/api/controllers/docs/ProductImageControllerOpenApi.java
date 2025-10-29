@@ -42,7 +42,7 @@ public interface ProductImageControllerOpenApi {
     })
     ResponseEntity<Set<ProductImageResponse>> saveImage(
             @PathVariable UUID productId,
-            @Valid @FileType(types = {"png", "jpeg", "jpg"}) List<MultipartFile> files) ;
+            @FileType(types = {"png", "jpeg", "jpg"}) List<MultipartFile> files) ;
 
 
     @Operation(summary = "Delete product Image")

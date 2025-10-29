@@ -53,9 +53,8 @@ public class ProductImageServiceImpl implements ProductImageService {
         File productImage = productDataProvider
                 .findFileByProductAndUserId(imageId, productId, getCurrentUser().getId())
                 .orElseThrow(() -> new AppEntityNotFound("Product Image not found"));
-        String content = productImage.getContentType()
-                .substring(productImage.getContentType().indexOf("/") + 1);
-        storageDataProvider.deleteFile(productImage.getPath(), productImage.getFileName() +"."+ content);
+
+        storageDataProvider.deleteFile(productImage.getPath(), productImage.getFileName() );
         fileRepository.deleteById(imageId);
     }
 
