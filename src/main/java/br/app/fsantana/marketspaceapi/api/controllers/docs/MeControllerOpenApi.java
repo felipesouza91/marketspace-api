@@ -3,8 +3,6 @@ package br.app.fsantana.marketspaceapi.api.controllers.docs;
 import br.app.fsantana.marketspaceapi.api.responses.FileResponse;
 import br.app.fsantana.marketspaceapi.api.responses.MeProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.MeResponse;
-import br.app.fsantana.marketspaceapi.domain.models.Product;
-import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.utils.validations.FileSize;
 import br.app.fsantana.marketspaceapi.utils.validations.FileType;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,15 +13,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.http.MediaType;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by felip on 20/10/2025.
@@ -61,5 +56,5 @@ public interface MeControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
-    ResponseEntity<FileResponse> uploadAvatar(@Valid @FileSize(max = "1MB") @FileType(types = {"png", "jpeg", "jpg"}) MultipartFile file) ;
+    ResponseEntity<FileResponse> uploadAvatar(@Valid @NotNull @FileSize(max = "1MB") @FileType(types = {"png", "jpeg", "jpg"})  MultipartFile file) ;
 }

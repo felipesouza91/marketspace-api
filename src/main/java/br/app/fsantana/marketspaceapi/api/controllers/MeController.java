@@ -13,6 +13,7 @@ import br.app.fsantana.marketspaceapi.utils.mappers.UserMapper;
 import br.app.fsantana.marketspaceapi.utils.validations.FileSize;
 import br.app.fsantana.marketspaceapi.utils.validations.FileType;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class MeController implements MeControllerOpenApi  {
 
 
     @PostMapping(value = "/avatar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<FileResponse> uploadAvatar(@Valid @FileSize(max = "1MB") @FileType(types = {"png", "jpeg", "jpg"}) MultipartFile file) {
+    public ResponseEntity<FileResponse> uploadAvatar(@Valid @NotNull @FileSize(max = "1MB") @FileType(types = {"png", "jpeg", "jpg"}) MultipartFile file) {
         var data = userFileService.uploadFile(file);
         return  ResponseEntity.ok(fileMapper.toResponse(data));
     }
