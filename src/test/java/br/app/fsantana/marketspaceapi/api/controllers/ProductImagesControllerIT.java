@@ -52,6 +52,20 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
     }
 
     @Test
+    @DisplayName("should return 400 when upload file with invalid contenty-type")
+    public void test7(){
+        Auth auth = token();
+        given()
+                .auth().oauth2(auth.getToken())
+                .contentType(ContentType.MULTIPART)
+                .multiPart("files", filePath().toFile(), "application/pdf" )
+                .post("/products/{productId}/image", UUID.randomUUID())
+                .then()
+                .statusCode(400)
+                .body("detail", is("Tipo de arquivo invalido"));
+    }
+
+    @Test
     @DisplayName("should return 200 when upload product file with success")
     public void test2()  {
         Auth auth = token();
@@ -89,7 +103,6 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
         Product product = createProduct(user);
         given()
                 .auth().oauth2(auth.getToken())
-
                 .delete("/products/{productId}/image/{imageid}", product.getId(), UUID.randomUUID())
                 .then()
                 .statusCode(404)
