@@ -1,0 +1,21 @@
+spring:
+  profile:
+    profiles:
+      active: test,minio
+  application:
+    name: marketspace-api
+  liquibase:
+    change-log: classpath:/db/db.changelog-master.yaml
+  jpa:
+    show-sql: true
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 10MB
+
+api:
+  security:
+    token:
+      secret: ${TOKEN_SECRET:ZTNiMGM0NDI5OGZjMWMxNDlhZmJmNGM4OTk2ZmI5MjQyN2FlNDFlNDY0OWI5MzRjYTQ5NTk5MWI3ODUyYjg1NQ==}
+      expiration-time: ${TOKEN_EXPIRATION_TIME:60}
