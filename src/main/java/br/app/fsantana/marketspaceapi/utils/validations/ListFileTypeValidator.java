@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ListFileTypeValidator implements ConstraintValidator<FileType, List<MultipartFile>> {
 
@@ -19,19 +20,17 @@ public class ListFileTypeValidator implements ConstraintValidator<FileType, List
 
 	@Override
 	public boolean isValid(List<MultipartFile> values, ConstraintValidatorContext context) {
-		try {
-			values.forEach(item -> {
-				int size = types.stream()
-						.filter(type -> item.getContentType().toLowerCase().contains(type.toLowerCase()))
-						.toList().size();
-				if (size < 1 ) {
-					throw new ValidationException();
-				}
-			});
-			return true;
-		}catch (ValidationException e ) {
-			return false;
-		}
+        boolean result = true;
 
+        for(MultipartFile file: values) {
+            int size = types.stream()
+                    .filter(type -> file.getContentType().toLowerCase().contains(type.toLowerCase()))
+                    .toList().size();
+            if (size < 1 ) {
+                result = false;
+                break;
+            }
+        }
+        return result;
     }
 }

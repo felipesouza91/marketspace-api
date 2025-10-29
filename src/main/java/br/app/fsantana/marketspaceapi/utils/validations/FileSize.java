@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = { FileSizeValidator.class })
 public @interface FileSize {
 
-	String message() default "tamanho do arquivo inválido";
+	String message() default "Tamanho do arquivo inválido";
 
 	Class<?>[] groups() default { };
 

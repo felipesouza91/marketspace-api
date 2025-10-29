@@ -17,7 +17,7 @@ import java.util.List;
 @Constraint(validatedBy = { FileTypeValidator.class, ListFileTypeValidator.class })
 public @interface FileType {
 
-    String message() default "Tipo de arquivo errado";
+    String message() default "Tipo de arquivo invalido";
 
     Class<?>[] groups() default { };
 
