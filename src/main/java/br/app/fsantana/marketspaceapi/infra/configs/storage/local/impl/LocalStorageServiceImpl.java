@@ -27,10 +27,6 @@ public class LocalStorageServiceImpl implements LocalStorageService {
     @Override
     public FileResponseData loadFile(String fileName) {
         File file = fileRepository.findByFileName(fileName).orElseThrow(() -> new AppEntityNotFound("File not found"));
-        boolean imageExits = localStorageDataProvider.fileExits(file.getPath(), file.getFileName());
-        if (!imageExits) {
-            throw new AppEntityNotFound("File not found");
-        }
 
         byte[] bytes = localStorageDataProvider
                 .loadImage(Path.of(file.getPath(), file.getFileName()).toString());

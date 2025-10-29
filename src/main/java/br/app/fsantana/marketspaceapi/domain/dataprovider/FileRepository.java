@@ -11,5 +11,6 @@ import java.util.UUID;
  */
 
 public interface FileRepository extends JpaRepository<File, UUID> {
-    Optional<File> findByFileName(String id);
+
+    Optional<File> findByFileName(String fileName);
 }

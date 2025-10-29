@@ -52,7 +52,6 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
 
     @Override
     public String getFileUrl(String path, String fileName) {
-        Path finalPath = Path.of(localProperties.getPath(), path, fileName);
         if (fileExits(path, fileName)) {
             return String.format("%s/files/%s",localProperties.getApiUrl(), fileName);
         }
