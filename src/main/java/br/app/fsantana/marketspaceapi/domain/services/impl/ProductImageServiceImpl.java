@@ -86,11 +86,12 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     private Path storageLocal(MultipartFile file) {
         try {
+            String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
             Path uploadPath = Paths.get("uploads/");
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-            Path filePath = uploadPath.resolve(file.getOriginalFilename());
+            Path filePath = uploadPath.resolve(String.format("%s.%s", UUID.randomUUID().toString(), content));
 
             Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             return filePath;
