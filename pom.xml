@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.app.fsantana</groupId>
 	<artifactId>marketspace-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<name>marketspace-api</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
@@ -27,6 +27,12 @@
 		<java.jwt.version>4.4.0</java.jwt.version>
 		<springdoc-openapi-starter.version>2.8.13</springdoc-openapi-starter.version>
 		<jsonwebtoken.version>0.11.5</jsonwebtoken.version>
+		<minio.version>8.5.17</minio.version>
+		<testcontainers.version>1.20.3</testcontainers.version>
+		<rest-assured.version>5.5.0</rest-assured.version>
+        <instancio.version>5.5.1</instancio.version>
+        <testcontainers.minio.version>1.20.0</testcontainers.minio.version>
+        <sonar.organization>felipesouza91</sonar.organization>
 	</properties>
 	<dependencies>
 
@@ -69,6 +75,13 @@
 			<version>${jsonwebtoken.version}</version>
 		</dependency>
 
+		<!-- Maven -->
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version> <!-- Use the latest version -->
+		</dependency>
+
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -92,6 +105,42 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-testcontainers</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>test</scope>
+			<version>${testcontainers.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>minio</artifactId>
+            <version>${testcontainers.minio.version}</version>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${testcontainers.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${rest-assured.version}</version>
+			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.instancio</groupId>
+            <artifactId>instancio-junit</artifactId>
+            <version>${instancio.version}</version>
+            <scope>test</scope>
+        </dependency>
+
 	</dependencies>
 
 	<build>
@@ -135,6 +184,101 @@
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <!-- Separates the unit tests from the integration tests. -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- Skip the default running of this plug-in (or everything is run twice...see below) -->
+                    <skip>true</skip>
+                    <!-- Show 100% of the lines from the stack trace (doesn't work) -->
+                    <trimStackTrace>false</trimStackTrace>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>unit-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Never skip running the tests when the test phase is invoked -->
+                            <skip>false</skip>
+                            <includes>
+                                <!-- Include unit tests within integration-test phase. -->
+                                <include>**/*Test.java</include>
+                            </includes>
+                            <excludes>
+                                <!-- Exclude integration tests within (unit) test phase. -->
+                                <exclude>**/*IntegrationTests.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>integration-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Never skip running the tests when the integration-test phase is invoked -->
+                            <skip>false</skip>
+                            <includes>
+                                <!-- Include integration tests within integration-test phase. -->
+                                <include>**/*IT.java</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/api/responses/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/api/requests/*</exclude>
+                        <exclude>**/*MarketspaceApiApplication.java</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/infra/configs/storage/local/LocalProperties.java</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/utils/mappers/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/secutiry/api/request/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/secutiry/api/response/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/domain/exceptions/*</exclude>
+                    </excludes>
+                    <formats>
+                        <format>XML</format>
+                        <format>HTML</format>
+                    </formats>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 

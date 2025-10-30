@@ -5,9 +5,7 @@ import br.app.fsantana.marketspaceapi.domain.models.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.validation.ObjectError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,14 +35,10 @@ public class ProductSpecs {
         if( Objects.isNull(filters)) {
             return likePredicates.toArray(Predicate[]::new);
         }
-        if (Objects.isNull(filters.getIsNew())) {
-            likePredicates.add(criteriaBuilder.equal(root.get("isNew"), true));
-        } else {
+        if (!Objects.isNull(filters.getIsNew())) {
             likePredicates.add(criteriaBuilder.equal(root.get("isNew"), filters.getIsNew()));
         }
-        if (Objects.isNull(filters.getAcceptTrade())) {
-            likePredicates.add(criteriaBuilder.equal(root.get("acceptTrade"), true));
-        } else {
+        if (!Objects.isNull(filters.getAcceptTrade())) {
             likePredicates.add(criteriaBuilder.equal(root.get("acceptTrade"), filters.getAcceptTrade()));
         }
         if (!Objects.isNull(filters.getPaymentMethods())) {

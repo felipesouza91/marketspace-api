@@ -1,22 +1,28 @@
 package br.app.fsantana.marketspaceapi.api.controllers;
 
+import br.app.fsantana.marketspaceapi.api.controllers.docs.MeControllerOpenApi;
+import br.app.fsantana.marketspaceapi.api.responses.FileResponse;
 import br.app.fsantana.marketspaceapi.api.responses.MeProductResponse;
 import br.app.fsantana.marketspaceapi.api.responses.MeResponse;
-import br.app.fsantana.marketspaceapi.api.responses.ProductResponse;
 import br.app.fsantana.marketspaceapi.domain.models.Product;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.MeService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppException;
+import br.app.fsantana.marketspaceapi.domain.services.UserFileService;
+import br.app.fsantana.marketspaceapi.utils.mappers.FileMapper;
 import br.app.fsantana.marketspaceapi.utils.mappers.UserMapper;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import br.app.fsantana.marketspaceapi.utils.validations.FileSize;
+import br.app.fsantana.marketspaceapi.utils.validations.FileType;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -26,12 +32,13 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/me")
-@SecurityRequirement(name = "security_auth")
 @RequiredArgsConstructor
-public class MeController {
+public class MeController implements MeControllerOpenApi  {
 
     private final MeService meService;
     private final UserMapper userMapper;
+    private final FileMapper fileMapper;
+    private final UserFileService userFileService;
 
     @GetMapping
     public ResponseEntity<MeResponse> getMyInfo() {
@@ -40,16 +47,18 @@ public class MeController {
     }
 
     @GetMapping("/products")
-    public ResponseEntity<?> getProducts() {
+    public ResponseEntity<Set<MeProductResponse>> getProducts() {
         Set<Product> products = meService.findMyProducts();
         Set<MeProductResponse> results = products.stream()
                 .map(userMapper::toMeProductResponse).collect(Collectors.toSet());
         return ResponseEntity.ok(results);
     }
 
-    @PostMapping("/avatar")
-    public ResponseEntity<?> uploadAvatar() {
-        throw new AppException("Not implemented");
+
+    @PostMapping(value = "/avatar",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<FileResponse> uploadAvatar(@Valid @NotNull @FileSize(max = "1MB") @FileType(types = {"png", "jpeg", "jpg"}) MultipartFile file) {
+        var data = userFileService.uploadFile(file);
+        return  ResponseEntity.ok(fileMapper.toResponse(data));
     }
 
 }

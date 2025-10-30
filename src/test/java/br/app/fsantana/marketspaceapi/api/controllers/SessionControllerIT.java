@@ -1,0 +1,164 @@
+package br.app.fsantana.marketspaceapi.api.controllers;
+
+import br.app.fsantana.marketspaceapi.configs.TestIntegrationConfig;
+import br.app.fsantana.marketspaceapi.domain.models.User;
+import br.app.fsantana.marketspaceapi.secutiry.api.request.AuthRequest;
+import br.app.fsantana.marketspaceapi.secutiry.api.request.RefreshTokenRequest;
+import br.app.fsantana.marketspaceapi.secutiry.api.request.UserCreateRequest;
+import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
+import io.restassured.http.ContentType;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import java.util.UUID;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+
+/**
+ * Created by felip on 20/10/2025.
+ */
+class SessionControllerIT  extends TestIntegrationConfig {
+
+    @Test
+    @DisplayName("should return 201 when create a user")
+    void test0(){
+        UserCreateRequest body = UserCreateRequest.builder()
+                .name("John Doe")
+                .email("johndoe@email.com")
+                .password("1234567")
+                .tel("559999999999")
+                .build();
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/signup")
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
+    @DisplayName("should return 200 when create create a token")
+    void test1() {
+
+        User user = createUser();
+
+        AuthRequest body = AuthRequest.builder()
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/token")
+                .then()
+                .statusCode(200)
+                .body("token", notNullValue());
+    }
+
+    @Test
+    @DisplayName("should return 200 when create create a token with refreshToken")
+    void test2() {
+
+        Auth token = token();
+
+        RefreshTokenRequest body = RefreshTokenRequest.builder()
+                .refreshToken(UUID.fromString(token.getRefreshToken())).build();
+
+
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/refresh-token")
+                .then()
+                .statusCode(200)
+                .body("token", notNullValue());
+    }
+
+    @Test
+    @DisplayName("should return 400 when create with user already exits")
+    void test3()  {
+
+        User user = createUser();
+
+        UserCreateRequest body = UserCreateRequest.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .tel(user.getTel())
+                .build();
+
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/signup")
+                .then()
+                .statusCode(400)
+                .body("detail", is("Invalid data try again with new datas"));
+    }
+
+    @Test
+    @DisplayName("should return 400 when create with tel already exits")
+    void test4() {
+
+        User user = createUser();
+
+        UserCreateRequest body = UserCreateRequest.builder()
+                .name(user.getName())
+                .email("johndoe2@email.com")
+                .password(user.getPassword())
+                .tel(user.getTel())
+                .build();
+
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/signup")
+                .then()
+                .statusCode(400)
+                .body("detail", is("Invalid data try again with new datas"));
+    }
+
+    @Test
+    @DisplayName("should return 404 when refresh token not exists")
+    void test5() {
+
+        RefreshTokenRequest body = RefreshTokenRequest.builder()
+                .refreshToken(UUID.randomUUID()).build();
+
+
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/refresh-token")
+                .then()
+                .statusCode(404)
+                .body("detail", is("Refresh token not found"));
+    }
+
+
+    @Test
+    @DisplayName("should return 401 when login fails")
+    void test6() {
+
+        AuthRequest body = AuthRequest.builder()
+                .email("invalid@email.com")
+                .password("invalidpassword")
+                .build();
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/token")
+                .then()
+                .statusCode(401)
+                .body("detail", is("Bad credentials"));
+    }
+}

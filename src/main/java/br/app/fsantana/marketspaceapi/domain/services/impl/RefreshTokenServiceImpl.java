@@ -5,7 +5,7 @@ import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.RefreshToken;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.RefreshTokenService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,13 +29,13 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         newRefreshToken.setUser(user);
         newRefreshToken.setExpiresIn(OffsetDateTime.now().plusDays(2).toEpochSecond());
         user.setRefreshToken(null);
+        userDataProvider.save(user);
         return refreshTokenDataProvider.save(newRefreshToken);
     }
 
     @Override
     public RefreshToken findById(UUID id) {
-        UUID userId = UUID.randomUUID();
-        return refreshTokenDataProvider.findByIdAndUserId(id, userId)
+        return refreshTokenDataProvider.findById(id)
                 .orElseThrow(() -> new AppEntityNotFound("Refresh token not found"));
 
     }

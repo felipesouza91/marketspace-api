@@ -23,7 +23,6 @@ public class ProductResponse {
     private Boolean isNew;
     private BigDecimal price;
     private Boolean acceptTrade;
-    private String userId;
     private Boolean isActive;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;

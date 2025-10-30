@@ -1,6 +1,7 @@
 package br.app.fsantana.marketspaceapi.secutiry.api.controller;
 
 import br.app.fsantana.marketspaceapi.domain.models.User;
+import br.app.fsantana.marketspaceapi.secutiry.api.controller.docs.SessionControllerOpenApi;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.AuthRequest;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.RefreshTokenRequest;
 import br.app.fsantana.marketspaceapi.secutiry.api.request.UserCreateRequest;
@@ -8,7 +9,6 @@ import br.app.fsantana.marketspaceapi.secutiry.api.response.AuthResponse;
 import br.app.fsantana.marketspaceapi.secutiry.api.response.TokenResponse;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.SessionService;
-import br.app.fsantana.marketspaceapi.utils.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.utils.mappers.SessionMapper;
 import br.app.fsantana.marketspaceapi.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -26,23 +26,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
-public class SessionController {
+public class SessionController implements SessionControllerOpenApi  {
 
     private final SessionService sessionService;
     private final UserMapper userMapper;
     private final SessionMapper sessionMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody UserCreateRequest request) {
-        try {
-            User user = userMapper.toModel(request);
-            sessionService.createUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (AppRuleException e ) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (Exception e ) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    public ResponseEntity<Void> createUser(@RequestBody UserCreateRequest request) {
+        User user = userMapper.toModel(request);
+        sessionService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/token")

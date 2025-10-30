@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 
@@ -21,7 +22,10 @@ import java.util.List;
 @NoArgsConstructor
 public class Auth implements UserDetails {
 
-    private User user;
+    @Serial
+    private static final long serialVersionUID = -4212591683704141252L;
+
+    private transient  User user;
     private String token;
     private String refreshToken;
 

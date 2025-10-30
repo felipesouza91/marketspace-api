@@ -3,7 +3,6 @@ package br.app.fsantana.marketspaceapi.domain.models;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,11 +17,13 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -66,17 +67,24 @@ public class Product {
     @Column(name = "is_active" )
     private Boolean isActive = Boolean.TRUE;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
+    @OneToMany
     @JoinTable(
             name = "payments_methods_to_products",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn( name = "payment_methods_id")
-    )
-    private Set<PaymentMethod> paymentMethods;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Set<ProductImage> productImages;
+    )
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
+
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "products_images",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn( name = "file_id")
+    )
+    private Set<File> productImages;
 
     @Column(name = "created_at")
     @CreationTimestamp

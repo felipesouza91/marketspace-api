@@ -5,7 +5,13 @@ target/
 !**/src/test/**/target/
 
 
+uploads
+filesdata
+
 **/application-*.yaml
+!**/application-test.yaml
+!**/application-testlocalstorage.yaml
+
 ### STS ###
 .apt_generated
 .classpath
