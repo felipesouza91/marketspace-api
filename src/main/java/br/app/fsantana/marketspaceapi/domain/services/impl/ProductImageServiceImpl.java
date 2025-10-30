@@ -65,7 +65,7 @@ public class ProductImageServiceImpl implements ProductImageService {
         try {
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
 
-            Path filePath = storageLocal(file);
+            //Path filePath = storageLocal(file);
             File newFile = File.builder()
                     .path(updatePath)
                     .fileName(UUID.randomUUID().toString()+ "." + content )
@@ -76,7 +76,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             fileRepository.save(newFile);
             String url = storageDataProvider.uploadFile(updatePath, newFile.getFileName(), file.getInputStream(), file.getContentType());
             newFile.setImageUrl(url);
-            Files.delete(filePath);
+            //Files.delete(filePath);
             return newFile;
         } catch (Exception e) {
             log.error(e.getMessage());

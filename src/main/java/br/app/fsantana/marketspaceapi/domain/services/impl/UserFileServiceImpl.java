@@ -35,9 +35,7 @@ public class UserFileServiceImpl implements UserFileService {
     @Override
     public String uploadFile( MultipartFile file) {
         try {
-            Path filePath = storageLocal(file);
-
-
+            //Path filePath = storageLocal(file);
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
             String avatarName = getCurrentUser().getId().toString() + "."+content;
             File avatarFile = File.builder()
@@ -54,7 +52,7 @@ public class UserFileServiceImpl implements UserFileService {
             getCurrentUser().setAvatar(save);
             userDataProvider.save(getCurrentUser());
 
-            Files.delete(filePath);
+           // Files.delete(filePath);
 
             return url;
         } catch (IOException e) {
