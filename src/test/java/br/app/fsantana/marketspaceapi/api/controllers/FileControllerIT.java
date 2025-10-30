@@ -26,10 +26,6 @@ import static org.hamcrest.core.Is.is;
 class FileControllerIT extends TestIntegrationConfigLocalStorage  {
 
     @Test
-    void contextLoads() {
-    }
-
-    @Test
     @DisplayName("should return 404 when upload file of a product that not exists")
     void test0(){
         Auth auth = token();

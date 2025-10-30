@@ -23,7 +23,7 @@ class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 201 when create a user")
-    void test0() throws Exception {
+    void test0(){
         UserCreateRequest body = UserCreateRequest.builder()
                 .name("John Doe")
                 .email("johndoe@email.com")
@@ -41,7 +41,7 @@ class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when create create a token")
-    void test1() throws Exception {
+    void test1() {
 
         User user = createUser();
 
@@ -61,7 +61,7 @@ class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when create create a token with refreshToken")
-    void test2() throws Exception {
+    void test2() {
 
         Auth token = token();
 
@@ -104,7 +104,7 @@ class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when create with tel already exits")
-    void test4() throws Exception {
+    void test4() {
 
         User user = createUser();
 
