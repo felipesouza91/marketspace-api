@@ -235,6 +235,22 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.12</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/api/responses/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/api/requests/*</exclude>
+                        <exclude>**/*MarketspaceApiApplication.java</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/infra/configs/storage/local/LocalProperties.java</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/utils/mappers/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/secutiry/api/request/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/secutiry/api/response/*</exclude>
+                        <exclude>**/*br/app/fsantana/marketspaceapi/domain/exceptions/*</exclude>
+                    </excludes>
+                    <formats>
+                        <format>XML</format>
+                        <format>HTML</format>
+                    </formats>
+                </configuration>
                 <executions>
                     <execution>
                         <id>jacoco-initialize</id>
@@ -260,22 +276,6 @@
                         <goals>
                             <goal>report</goal>
                         </goals>
-                        <configuration>
-                            <excludes>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/api/responses/*</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/api/requests/*</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/MarketspaceApiApplication.java</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/infra/configs/storage/local/LocalProperties.java</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/utils/mappers/*</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/secutiry/api/request/*</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/secutiry/api/response/*</exclude>
-                                <exclude>**/*br/app/fsantana/marketspaceapi/domain/exceptions/*</exclude>
-                            </excludes>
-                            <formats>
-                                <format>XML</format>
-                                <format>HTML</format>
-                            </formats>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
