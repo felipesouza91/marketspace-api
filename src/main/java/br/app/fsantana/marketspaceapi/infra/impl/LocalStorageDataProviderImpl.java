@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -29,12 +30,14 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
     @Override
     public String uploadFile(String path, String fileName, InputStream inputStream, String contentType) {
         try {
-            Path uploadPath = Paths.get(localProperties.getPath(), path);
-
+            Path uploadPath = Paths.get(localProperties.getPath(), path).normalize();
+            if (!uploadPath.startsWith(localProperties.getPath())) {
+                throw new IOException("Entry is outside of the target directory");
+            }
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-            Path saved = Path.of(localProperties.getPath(), path, fileName);
+            Path saved = Path.of(localProperties.getPath(), path, fileName).normalize();
 
             Files.copy(inputStream, saved, StandardCopyOption.REPLACE_EXISTING);
             return saved.toString();

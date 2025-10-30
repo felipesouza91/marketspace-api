@@ -65,7 +65,6 @@ public class ProductImageServiceImpl implements ProductImageService {
         try {
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
 
-            //Path filePath = storageLocal(file);
             File newFile = File.builder()
                     .path(updatePath)
                     .fileName(UUID.randomUUID().toString()+ "." + content )
@@ -76,27 +75,10 @@ public class ProductImageServiceImpl implements ProductImageService {
             fileRepository.save(newFile);
             String url = storageDataProvider.uploadFile(updatePath, newFile.getFileName(), file.getInputStream(), file.getContentType());
             newFile.setImageUrl(url);
-            //Files.delete(filePath);
             return newFile;
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new AppException("Error when update files", e);
-        }
-    }
-
-    private Path storageLocal(MultipartFile file) {
-        try {
-            String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
-            Path uploadPath = Paths.get("uploads/");
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(String.format("%s.%s", UUID.randomUUID().toString(), content));
-
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return filePath;
-        } catch (Exception e) {
-            throw new AppException("Erro when update files", e);
         }
     }
 

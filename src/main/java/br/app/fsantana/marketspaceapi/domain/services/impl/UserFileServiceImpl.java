@@ -13,11 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
 
 /**
  * Created by felip on 17/10/2025.
@@ -35,7 +30,6 @@ public class UserFileServiceImpl implements UserFileService {
     @Override
     public String uploadFile( MultipartFile file) {
         try {
-            //Path filePath = storageLocal(file);
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
             String avatarName = getCurrentUser().getId().toString() + "."+content;
             File avatarFile = File.builder()
@@ -52,7 +46,6 @@ public class UserFileServiceImpl implements UserFileService {
             getCurrentUser().setAvatar(save);
             userDataProvider.save(getCurrentUser());
 
-           // Files.delete(filePath);
 
             return url;
         } catch (IOException e) {
@@ -60,23 +53,6 @@ public class UserFileServiceImpl implements UserFileService {
         }
     }
 
-
-    private Path storageLocal(MultipartFile file) {
-        try {
-            String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);
-
-            Path uploadPath = Paths.get("uploads/");
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(String.format("%s.%s", UUID.randomUUID().toString(), content));
-
-            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            return filePath;
-        } catch (Exception e) {
-            throw new AppException("Erro when update files");
-        }
-    }
 
     private User getCurrentUser() {
         return userSessionService.getCurrentUser();
