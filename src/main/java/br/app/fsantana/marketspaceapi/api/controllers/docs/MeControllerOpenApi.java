@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -34,27 +33,20 @@ public interface MeControllerOpenApi {
 
 
     @Operation(summary = "Find user info")
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "User data"),
-
-            @ApiResponse(responseCode = "404", description = "User data not found",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @ApiResponse(responseCode = "201", description = "User data")
+    @ApiResponse(responseCode = "404", description = "User data not found",
+            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<MeResponse> getMyInfo();
 
     @Operation(summary = "Get user products")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "User Product data"),
-            @ApiResponse(responseCode = "404", description = "User Product data not found",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @ApiResponse(responseCode = "200", description = "User Product data")
+    @ApiResponse(responseCode = "404", description = "User Product data not found",
+            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<Set<MeProductResponse>> getProducts();
 
     @Operation(summary = "Upload user Avatar")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "Upload user Avatar success"),
-            @ApiResponse(responseCode = "404", description = "User not found",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
-    })
+    @ApiResponse(responseCode = "200", description = "Upload user Avatar success")
+    @ApiResponse(responseCode = "404", description = "User not found",
+            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<FileResponse> uploadAvatar(@Valid @NotNull @FileSize(max = "1MB") @FileType(types = {"png", "jpeg", "jpg"})  MultipartFile file) ;
 }

@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.context.annotation.Profile;
@@ -23,16 +22,13 @@ public interface FileControllerOpenApi {
 
 
     @Operation(summary = "Load file by bame")
-    @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "File data", content = @Content(mediaType = "")),
-            @ApiResponse(responseCode = "404", description = " File not found",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
-            @ApiResponse(responseCode = "500", description = "Server error",
-                    content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
-
-    })
+    @ApiResponse(responseCode = "200", description = "File data", content = @Content(mediaType = ""))
+    @ApiResponse(responseCode = "404", description = " File not found",
+            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "401", description = "Unauthorized",
+            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+    @ApiResponse(responseCode = "500", description = "Server error",
+            content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     ResponseEntity<Object> getImage(@PathVariable String fileName);
 
 }
