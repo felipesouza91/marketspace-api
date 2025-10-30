@@ -29,7 +29,6 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.MinIOContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -190,7 +189,7 @@ public abstract class TestIntegrationConfigLocalStorage {
             java.io.File fileData = filePath().toFile();
 
 
-            String content = Files.probeContentType(path);;
+            String content = Files.probeContentType(path);
             String avatarName = user.getId().toString() + "."+ content.substring(content.indexOf("/")+1);
             File avatarFile = File.builder()
                     .path("avatars")
@@ -201,7 +200,7 @@ public abstract class TestIntegrationConfigLocalStorage {
 
             File save = fileRepository.save(avatarFile);
 
-            String url = storageDataProvider.uploadFile("avatars", avatarName, new FileInputStream(fileData), content);
+            storageDataProvider.uploadFile("avatars", avatarName, new FileInputStream(fileData), content);
 
             user.setAvatar(save);
             userDataProvider.save(user);

@@ -18,10 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "Files")
 @SecurityRequirement(name = "security_auth")
-@ApiResponse(responseCode = "401", description = "Unauthorized",
-        content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
-@ApiResponse(responseCode = "500", description = "Server error",
-        content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
 @Profile("local-storage")
 public interface FileControllerOpenApi {
 
@@ -30,8 +26,13 @@ public interface FileControllerOpenApi {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "File data", content = @Content(mediaType = "")),
             @ApiResponse(responseCode = "404", description = " File not found",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized",
+                    content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "500", description = "Server error",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+
     })
-    public ResponseEntity<?> getImage(@PathVariable String fileName);
+    ResponseEntity<Object> getImage(@PathVariable String fileName);
 
 }

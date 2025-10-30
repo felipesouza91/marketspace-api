@@ -19,11 +19,11 @@ import static org.hamcrest.Matchers.notNullValue;
 /**
  * Created by felip on 20/10/2025.
  */
-public class SessionControllerIT  extends TestIntegrationConfig {
+class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 201 when create a user")
-    public void test0() throws Exception {
+    void test0() throws Exception {
         UserCreateRequest body = UserCreateRequest.builder()
                 .name("John Doe")
                 .email("johndoe@email.com")
@@ -41,7 +41,7 @@ public class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when create create a token")
-    public void test1() throws Exception {
+    void test1() throws Exception {
 
         User user = createUser();
 
@@ -61,7 +61,7 @@ public class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when create create a token with refreshToken")
-    public void test2() throws Exception {
+    void test2() throws Exception {
 
         Auth token = token();
 
@@ -81,7 +81,7 @@ public class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when create with user already exits")
-    public void test3() throws Exception {
+    void test3()  {
 
         User user = createUser();
 
@@ -104,7 +104,7 @@ public class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when create with tel already exits")
-    public void test4() throws Exception {
+    void test4() throws Exception {
 
         User user = createUser();
 
@@ -127,7 +127,7 @@ public class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 404 when refresh token not exists")
-    public  void test5() {
+    void test5() {
 
         RefreshTokenRequest body = RefreshTokenRequest.builder()
                 .refreshToken(UUID.randomUUID()).build();
@@ -143,4 +143,22 @@ public class SessionControllerIT  extends TestIntegrationConfig {
                 .body("detail", is("Refresh token not found"));
     }
 
+
+    @Test
+    @DisplayName("should return 401 when login fails")
+    void test6() {
+
+        AuthRequest body = AuthRequest.builder()
+                .email("invalid@email.com")
+                .password("invalidpassword")
+                .build();
+        given()
+                .body(body)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/auth/token")
+                .then()
+                .statusCode(401)
+                .body("detail", is("Bad credentials"));
+    }
 }

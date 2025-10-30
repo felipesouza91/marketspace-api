@@ -60,7 +60,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
 
     private File saveImage(Product product, MultipartFile file) {
-        String updatePath = "products"+ "/" + product.getId().toString();
+        String updatePath = Path.of("products", product.getId().toString()).toString();
 
         try {
             String content = file.getContentType().substring(file.getContentType().indexOf("/")+1);

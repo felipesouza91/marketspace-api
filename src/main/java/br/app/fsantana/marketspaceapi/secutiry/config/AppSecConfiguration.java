@@ -22,7 +22,6 @@ public class AppSecConfiguration {
     private final UserDataProvider userDataProvider;
 
     @Bean
-    @Transactional(readOnly = true)
     public UserDetailsService userDetailsService() {
         return username -> {
          User user =  userDataProvider.findByEmail(username)

@@ -16,12 +16,12 @@ import static org.hamcrest.Matchers.notNullValue;
  * Created by felip on 24/10/2025.
  */
 
-public class MeControllerIT extends TestIntegrationConfig  {
+class MeControllerIT extends TestIntegrationConfig  {
 
 
     @Test
     @DisplayName("should return 401 when token is invalid")
-    public void test0() throws Exception {
+    void test0() {
         given()
                 .when()
                 .get("/me")
@@ -31,24 +31,7 @@ public class MeControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return user data ")
-    public void test1() {
-        Auth auth = token();
-
-        given()
-                .auth().oauth2(auth.getToken())
-                .when()
-                .get("/me")
-                .then()
-                .statusCode(200)
-                .body("id", is(auth.getUser().getId().toString()))
-                .body("name", is(auth.getUser().getName()))
-                .body("email", is(auth.getUser().getEmail()))
-                .body("tel", is(auth.getUser().getTel()));
-    }
-
-    @Test
-    @DisplayName("should return user data ")
-    public void test2() {
+    void test1() {
         Auth auth = token();
 
         given()
@@ -65,7 +48,7 @@ public class MeControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return products from a user")
-    public void test3() {
+    void test3() {
         Auth auth = token();
         Product product = createProduct(auth.getUser());
 
@@ -87,7 +70,7 @@ public class MeControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should update user avatar")
-    public void test4() {
+    void test4() {
         Auth auth = token();
         given()
                 .contentType(ContentType.MULTIPART)
@@ -102,7 +85,7 @@ public class MeControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 400 when update avatar with invalid content type")
-    public void test5() {
+    void test5() {
         Auth auth = token();
         given()
                 .contentType(ContentType.MULTIPART)
@@ -117,7 +100,7 @@ public class MeControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 400 when update avatar file with size greater than 1mb")
-    public void test6() {
+    void test6() {
         Auth auth = token();
         given()
                 .contentType(ContentType.MULTIPART)

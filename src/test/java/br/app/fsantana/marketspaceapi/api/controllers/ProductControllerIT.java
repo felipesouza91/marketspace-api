@@ -30,7 +30,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 201 when save product")
-    public void test0() {
+    void test0() {
         Auth auth = token();
         String paymentMethod = Instancio.gen().oneOf(getPaymentKeys()).get();
         ProductCreateRequest body = Instancio.of(ProductCreateRequest.class)
@@ -60,7 +60,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when payment method is invalid")
-    public void test1() {
+    void test1() {
         Auth auth = token();
         String paymentMethod = "invalid";
         ProductCreateRequest body = Instancio.of(ProductCreateRequest.class)
@@ -79,7 +79,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when required fields not provide")
-    public void test2() {
+    void test2() {
         Auth auth = token();
         String paymentMethod = Instancio.gen().oneOf(getPaymentKeys()).get();
         ProductCreateRequest body = Instancio.of(ProductCreateRequest.class)
@@ -100,7 +100,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when find product by id")
-    public void test3() {
+    void test3() {
         Auth auth = token();
         Product product = super.createProduct(auth.getUser());
         given()
@@ -124,7 +124,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 404 when find product by id not found")
-    public void test4() {
+    void test4() {
         Auth auth = token();
 
         given()
@@ -137,7 +137,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when update product with pending required field")
-    public void test5() {
+    void test5() {
         Auth auth = token();
         User user = super.createUserB();
         Product product = createProduct(user);
@@ -159,7 +159,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when update product with pending required field")
-    public void test6() {
+    void test6() {
         Auth auth = token();
         User user = super.createUserB();
         Product product = createProduct(user);
@@ -180,7 +180,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when update product that not exists")
-    public void test7() {
+    void test7() {
         Auth auth = token();
         String paymentMethod = Instancio.gen().oneOf(getPaymentKeys()).get();
         ProductUpdateRequest body = Instancio.of(ProductUpdateRequest.class)
@@ -198,7 +198,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when update product that has a another user")
-    public void test8() {
+    void test8() {
         Auth auth = token();
         User user = createUserB();
         Product product  = createProduct(user);
@@ -218,7 +218,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when update product")
-    public void test9() {
+    void test9() {
         Auth auth = token();
         Product product = createProduct(auth.getUser());
         String paymentMethod = Instancio.gen().oneOf(getPaymentKeys()).get();
@@ -248,7 +248,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when change status of a product when required values not provide")
-    public void test10() {
+    void test10() {
         Auth auth = token();
         User user = super.createUserB();
         Product product = createProduct(user);
@@ -266,7 +266,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when change status of a product that not exists")
-    public void test11() {
+    void test11() {
         Auth auth = token();
 
         ProductActiveUpdateRequest body = Instancio.create(ProductActiveUpdateRequest.class);
@@ -282,7 +282,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 400 when change status of a product that has another user")
-    public void test12() {
+    void test12() {
         Auth auth = token();
         User user = createUserB();
         Product product  = createProduct(user);
@@ -301,7 +301,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when change status of a product")
-    public void test13() {
+    void test13() {
         Auth auth = token();
         Product product  = createProduct(auth.getUser());
         ProductActiveUpdateRequest body = Instancio.of(ProductActiveUpdateRequest.class)
@@ -319,7 +319,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 404 when delete a product that no exists")
-    public void test14() {
+    void test14() {
         Auth auth = token();
         given()
                 .auth().oauth2(auth.getToken())
@@ -331,7 +331,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 404 when delete a product that has another user")
-    public void test15() {
+    void test15() {
         Auth auth = token();
         User user = createUserB();
         Product product  = createProduct(user);
@@ -345,7 +345,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 204 when delete a product")
-    public void test16() {
+    void test16() {
         Auth auth = token();
         Product product  = createProduct(auth.getUser());
         createProductImage(product);
@@ -358,7 +358,7 @@ class ProductControllerIT extends TestIntegrationConfig {
 
     @Test
     @DisplayName("should return 200 when find products")
-    public void test17() {
+    void test17() {
         Auth auth = token();
         User user = createUserB();
         createProduct(user);

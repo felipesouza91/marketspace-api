@@ -9,7 +9,6 @@ import br.app.fsantana.marketspaceapi.secutiry.api.response.AuthResponse;
 import br.app.fsantana.marketspaceapi.secutiry.api.response.TokenResponse;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.SessionService;
-import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.utils.mappers.SessionMapper;
 import br.app.fsantana.marketspaceapi.utils.mappers.UserMapper;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class SessionController implements SessionControllerOpenApi  {
     private final SessionMapper sessionMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<Void> createUser(@RequestBody UserCreateRequest request) {
         User user = userMapper.toModel(request);
         sessionService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).build();

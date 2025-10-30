@@ -13,6 +13,7 @@ import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.ProductService;
 import br.app.fsantana.marketspaceapi.secutiry.services.UserSessionService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -26,9 +27,10 @@ import java.util.stream.Collectors;
  */
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService  {
 
+    public static final String PRODUCT_NOT_FOUND = "Product not found";
     private final ProductDataProvider repository;
     private final PaymentMethodRepository paymentMethodRepository;
     private final UserSessionService userSessionService;
@@ -53,7 +55,7 @@ public class ProductServiceImpl implements ProductService  {
     @Override
     public Product findById(UUID id) {
         return repository.findById(id)
-                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+                .orElseThrow(() -> new AppEntityNotFound(PRODUCT_NOT_FOUND));
     }
 
     @Override
@@ -69,7 +71,7 @@ public class ProductServiceImpl implements ProductService  {
                 .orElseThrow(() -> new AppRuleException("PaymentMethod invalid"))).collect(Collectors.toSet());
 
         Product productSaved = repository.findByIdAndUserId(id, getUser().getId())
-                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+                .orElseThrow(() -> new AppEntityNotFound(PRODUCT_NOT_FOUND));
 
         productSaved.setName(model.getName());
         productSaved.setDescription(model.getDescription());
@@ -85,7 +87,7 @@ public class ProductServiceImpl implements ProductService  {
     @Override
     public Product changeActiveState(UUID id, Boolean isActive) {
         Product productSaved = repository.findByIdAndUserId(id, getUser().getId())
-                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+                .orElseThrow(() -> new AppEntityNotFound(PRODUCT_NOT_FOUND));
 
         productSaved.setIsActive(isActive);
         productSaved.setUpdatedAt(OffsetDateTime.now());
@@ -96,7 +98,7 @@ public class ProductServiceImpl implements ProductService  {
     @Override
     public void deleteById(UUID id) {
         Product product = repository.findByIdAndUserId(id, getUser().getId())
-                .orElseThrow(() -> new AppEntityNotFound("Product not found"));
+                .orElseThrow(() -> new AppEntityNotFound(PRODUCT_NOT_FOUND));
 
         product.getProductImages()
                 .forEach(item -> {

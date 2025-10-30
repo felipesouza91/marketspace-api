@@ -89,7 +89,6 @@ public class TokenServiceImpl implements TokenService {
             User userDetails,
             long expiration
     ) {
-        Date date = Date.from(OffsetDateTime.now().toInstant());
         return Jwts
                 .builder()
                 .setClaims(extraClaims)

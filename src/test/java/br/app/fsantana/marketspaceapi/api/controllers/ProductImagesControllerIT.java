@@ -23,7 +23,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 404 when upload file of a product that not exists")
-    public void test0(){
+    void test0(){
         Auth auth = token();
         given()
                 .auth().oauth2(auth.getToken())
@@ -37,7 +37,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 404 when upload file of product does not belong to the user")
-    public void test1() {
+    void test1() {
         Auth auth = token();
         User user = createUserB();
         Product product = createProduct(user);
@@ -53,7 +53,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 400 when upload file with invalid contenty-type")
-    public void test7(){
+    void test7(){
         Auth auth = token();
         given()
                 .auth().oauth2(auth.getToken())
@@ -67,7 +67,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 200 when upload product file with success")
-    public void test2()  {
+    void test2()  {
         Auth auth = token();
         Product product = createProduct(auth.getUser());
         given()
@@ -84,7 +84,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 404 when delete product file not exits")
-    public void test3()  {
+    void test3()  {
         Auth auth = token();
         given()
                 .auth().oauth2(auth.getToken())
@@ -97,7 +97,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 404 when delete product file that belong to another user")
-    public void test4()  {
+    void test4()  {
         Auth auth = token();
         User user = createUserB();
         Product product = createProduct(user);
@@ -111,7 +111,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 404 when delete product file that belong to another user")
-    public void test5()  {
+    void test5()  {
         Auth auth = token();
         Product product = createProduct(auth.getUser());
         given()
@@ -124,7 +124,7 @@ class ProductImagesControllerIT extends TestIntegrationConfig  {
 
     @Test
     @DisplayName("should return 204 when delete product file success")
-    public void test6()  {
+    void test6()  {
         Auth auth = token();
         Product product = createProduct(auth.getUser());
         File productImage = createProductImage(product);

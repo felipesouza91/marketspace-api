@@ -2,11 +2,8 @@ package br.app.fsantana.marketspaceapi.utils.validations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.util.unit.DataSize;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 public class FileTypeValidator implements ConstraintValidator<FileType, MultipartFile> {

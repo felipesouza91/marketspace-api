@@ -2,12 +2,10 @@ package br.app.fsantana.marketspaceapi.utils.validations;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.ValidationException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ListFileTypeValidator implements ConstraintValidator<FileType, List<MultipartFile>> {
 

@@ -5,9 +5,7 @@ import br.app.fsantana.marketspaceapi.domain.models.Product;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.validation.ObjectError;
 
 import java.util.ArrayList;
 import java.util.List;

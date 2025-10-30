@@ -5,7 +5,6 @@ import br.app.fsantana.marketspaceapi.api.responses.ProductImageResponse;
 import br.app.fsantana.marketspaceapi.domain.services.ProductImageService;
 import br.app.fsantana.marketspaceapi.utils.mappers.ProductImageMapper;
 import br.app.fsantana.marketspaceapi.utils.validations.FileType;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class ProductImagesController implements ProductImageControllerOpenApi {
     }
 
     @DeleteMapping("/image/{imageId}")
-    public ResponseEntity<?> deleteImages(
+    public ResponseEntity<Void> deleteImages(
             @PathVariable UUID productId,  @PathVariable UUID imageId ) {
         productImageService.deleteImage(productId, imageId);
         return ResponseEntity.noContent().build();

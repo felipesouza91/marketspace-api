@@ -30,7 +30,7 @@ public interface SessionControllerOpenApi {
             @ApiResponse(responseCode = "400", description = "Client bad request",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class))),
     })
-    ResponseEntity<?> createUser(@RequestBody UserCreateRequest request);
+    ResponseEntity<Void> createUser(@RequestBody UserCreateRequest request);
 
     @Operation(summary = "Login with password")
     @ApiResponses({

@@ -193,7 +193,7 @@ public abstract class TestIntegrationConfig {
             java.io.File fileData = filePath().toFile();
 
 
-            String content = Files.probeContentType(path);;
+            String content = Files.probeContentType(path);
             String avatarName = user.getId().toString() + "."+ content.substring(content.indexOf("/")+1);
             File avatarFile = File.builder()
                     .path("avatars")
@@ -204,7 +204,7 @@ public abstract class TestIntegrationConfig {
 
             File save = fileRepository.save(avatarFile);
 
-            String url = storageDataProvider.uploadFile("avatars", avatarName, new FileInputStream(fileData), content);
+            storageDataProvider.uploadFile("avatars", avatarName, new FileInputStream(fileData), content);
 
             user.setAvatar(save);
             userDataProvider.save(user);

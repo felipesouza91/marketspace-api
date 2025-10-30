@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,7 +52,7 @@ public interface ProductImageControllerOpenApi {
             @ApiResponse(responseCode = "404", description = "Product/Product Image data not found",
                     content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
     })
-    ResponseEntity<?> deleteImages(
+    ResponseEntity<Void> deleteImages(
             @PathVariable UUID productId,  @PathVariable UUID imageId ) ;
 
 }
