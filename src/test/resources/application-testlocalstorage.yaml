@@ -8,6 +8,9 @@ spring:
     change-log: classpath:/db/db.changelog-master.yaml
   jpa:
     show-sql: true
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
 
   servlet:
     multipart:
