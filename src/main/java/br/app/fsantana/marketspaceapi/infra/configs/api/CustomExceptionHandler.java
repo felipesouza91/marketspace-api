@@ -1,6 +1,7 @@
 package br.app.fsantana.marketspaceapi.infra.configs.api;
 
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.FieldProblem;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.ProblemType;
@@ -9,9 +10,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import jakarta.annotation.Nullable;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
@@ -38,13 +39,14 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @ControllerAdvice
+@RequiredArgsConstructor
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
-  @Autowired
-  private MessageSource messageSource;
+
+  private final MessageSource messageSource;
 
   @ExceptionHandler(AppEntityNotFound.class)
-  public ResponseEntity<?> handleAppEntityNotFound(AppEntityNotFound ex, WebRequest request) {
+  public ResponseEntity<Object> handleAppEntityNotFound(AppEntityNotFound ex, WebRequest request) {
     HttpStatusCode statusCode = HttpStatus.NOT_FOUND;
     ProblemDetail problemDetail = this.createProblemDetail(statusCode,
         ProblemType.RECURSO_NAO_ENCONTRADO.getTitle(), ex.getMessage(), null);
@@ -52,7 +54,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
     @ExceptionHandler(AppRuleException.class)
-    public ResponseEntity<?> handleAppRuleException(AppRuleException ex, WebRequest request) {
+    public ResponseEntity<Object> handleAppRuleException(AppRuleException ex, WebRequest request) {
         HttpStatusCode statusCode = HttpStatus.BAD_REQUEST;
         ProblemDetail problemDetail = this.createProblemDetail(statusCode,
                 ProblemType.ERRO_NEGOCIO.getTitle(), ex.getMessage(), null);
@@ -64,7 +66,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
    * AppSecurityException handle.
    */
   @ExceptionHandler({AppSecurityException.class , BadCredentialsException.class})
-  public ResponseEntity<?> handleBusinessRuleException(Exception ex,
+  public ResponseEntity<Object> handleBusinessRuleException(Exception ex,
                                                        WebRequest request) {
     HttpStatusCode status = HttpStatus.UNAUTHORIZED;
     ProblemDetail problemDetail = this.createProblemDetail(status,
@@ -76,8 +78,8 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
   /**
    * Custom method.
    */
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<?> handlerUncaught(Exception ex, WebRequest request) {
+  @ExceptionHandler({Exception.class, AppException.class})
+  public ResponseEntity<Object> handlerUncaught(Exception ex, WebRequest request) {
     HttpStatusCode status = HttpStatus.INTERNAL_SERVER_ERROR;
     String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o "
         + "problema persistir, entre em contato com o administrador do sistema.";
@@ -94,16 +96,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     return super.handleExceptionInternal(ex, body, headers, statusCode, request);
   }
 
+  @Override
   @Nullable
   protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                 HttpHeaders headers, HttpStatusCode status, WebRequest request) {
     Throwable rootCause = ExceptionUtils.getRootCause(ex);
     String detail = "O corpo da requisição esta invalido. Verifique erro na sintaxe";
-    if (rootCause instanceof InvalidFormatException) {
-      return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status,
+    if (rootCause instanceof InvalidFormatException invalidCause) {
+      return handleInvalidFormatException( invalidCause, headers, status,
           request);
-    } else if (rootCause instanceof PropertyBindingException) {
-      return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status,
+    } else if (rootCause instanceof PropertyBindingException bindCause) {
+      return handlePropertyBindingException(bindCause, headers, status,
           request);
     }
     ProblemDetail problem = this.createProblemDetail(status,
@@ -124,7 +127,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
             HttpStatusCode status, WebRequest request) {
         String detail = "";
         if(!ex.getParameterValidationResults().isEmpty()) {
-            detail = ex.getParameterValidationResults().get(0).getResolvableErrors().getFirst().getDefaultMessage();
+            detail = ex.getParameterValidationResults().getFirst().getResolvableErrors().getFirst().getDefaultMessage();
         } else {
             detail = "Um ou mais campos estão invalidos."
                     + " Faça o preenchimento correto e tente novamente";
@@ -167,34 +170,34 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         path);
     ProblemDetail problem = this.createProblemDetail(status,
         ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
-    return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    return handleExceptionInternal(ex, problem, headers, status, request);
   }
 
   private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
       HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-    String path = "";
+    String path = joinPath(ex.getPath());
     String detail = String.format("A propriedate '%s' recebeu o valor '%s'"
             + " que é de um tipo invalido. Corrija e informe um valor compativel com o tipo '%s'.",
         path, ex.getValue(), ex.getTargetType().getSimpleName());
     ProblemDetail problemdetail = this.createProblemDetail(status,
         ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
-    return handleExceptionInternal(ex, problemdetail, new HttpHeaders(), status, request);
+    return handleExceptionInternal(ex, problemdetail, headers, status, request);
   }
 
   private String joinPath(List<JsonMappingException.Reference> list) {
-    return list.stream().map(ref -> ref.getFieldName()).collect(Collectors.joining("."));
+    return list.stream().map(JsonMappingException.Reference::getFieldName).collect(Collectors.joining("."));
   }
 
   private List<FieldProblem> buildFields(List<ObjectError> list) {
     return list.stream().map(objectError -> {
       String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
       String nome = objectError.getObjectName();
-      if (objectError instanceof FieldError) {
-        nome = ((FieldError) objectError).getField();
+      if (objectError instanceof FieldError fieldError) {
+        nome = fieldError.getField();
       }
       return FieldProblem.builder().name(nome).detail(message).build();
-    }).collect(Collectors.toList());
+    }).toList();
   }
 
   private ProblemDetail createProblemDetail(HttpStatusCode statusCode, String title, String detail,
