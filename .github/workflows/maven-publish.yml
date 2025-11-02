@@ -39,12 +39,18 @@ jobs:
       uses: entimaniac/read-pom-version-action@1.0.0
       id: getVersion
 
-    - name: Build with Maven
+    - name: Build with Maven image amd
       run: >
         mvn spring-boot:build-image -DskipTests
-        -Dspring-boot.build-image.imagePlatform=linux[/amd64,/arm64]
+        -Dspring-boot.build-image.imagePlatform=linux/amd64
         -Dspring-boot.build-image.imageName=${{secrets.DOCKERHUB_USERNAME}}/marketspace-api:${{steps.getVersion.outputs.version}} 
-
+    
+    - name: Build with Maven image arm64
+      run: >
+        mvn spring-boot:build-image -DskipTests
+        -Dspring-boot.build-image.imagePlatform=linux/arm64
+        -Dspring-boot.build-image.imageName=${{secrets.DOCKERHUB_USERNAME}}/marketspace-api:${{steps.getVersion.outputs.version}}
+    
     - name: Login to DockerHub
       uses: docker/login-action@v2
       with:
