@@ -44,7 +44,6 @@ jobs:
         mvn spring-boot:build-image -DskipTests
         -Dspring-boot.build-image.imagePlatform=linux/amd64
         -Dspring-boot.build-image.imagePlatform=linux/arm64
-        -Dspring-boot.build-image.imagePlatform=linux/arm/v7
         -Dspring-boot.build-image.imageName=${{secrets.DOCKERHUB_USERNAME}}/marketspace-api:${{steps.getVersion.outputs.version}} 
 
     - name: Login to DockerHub
