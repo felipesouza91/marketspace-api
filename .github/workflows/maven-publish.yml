@@ -39,7 +39,7 @@ jobs:
       id: getVersion
 
     - name: Build with Maven
-      run: mvn run -DimagePlatform=linux/amd64,linux/arm64,linux/arm/v5 -Dname=${{secrets.DOCKERHUB_USERNAME}}/marketspace-api:${{steps.getVersion.outputs.version}} spring-boot:build-image
+      run: mvn -DimagePlatform=linux/amd64,linux/arm64,linux/arm/v5 -Dname=${{secrets.DOCKERHUB_USERNAME}}/marketspace-api:${{steps.getVersion.outputs.version}} spring-boot:build-image
     
     - name: Login to DockerHub
       uses: docker/login-action@v2
