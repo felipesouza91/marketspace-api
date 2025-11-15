@@ -33,10 +33,11 @@ public class SessionController implements SessionControllerOpenApi  {
     private final SessionMapper sessionMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> createUser(@RequestBody UserCreateRequest request) {
+    public ResponseEntity<AuthResponse> createUser(@RequestBody UserCreateRequest request) {
         User user = userMapper.toModel(request);
         sessionService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Auth authData = sessionService.createToken(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(sessionMapper.toResponse(authData));
     }
 
     @PostMapping("/token")

@@ -36,7 +36,9 @@ class SessionControllerIT  extends TestIntegrationConfig {
                 .when()
                 .post("/auth/signup")
                 .then()
-                .statusCode(201);
+                .statusCode(201)
+                .body("token", notNullValue())
+                .body("refreshToken", notNullValue());
     }
 
     @Test
