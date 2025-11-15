@@ -48,10 +48,10 @@ jobs:
       uses: actions/checkout@v3
       
     - name: Set up QEMU
-      uses: docker/setup-qemu-action@v2
+      uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7
       
     - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v2
+      uses: docker/setup-buildx-action@dc7b9719a96d48369863986a06765841d7ea23f6
       
     - name: Set up JDK 21
       uses: actions/setup-java@v3
@@ -69,20 +69,20 @@ jobs:
           ${{ runner.os }}-maven-
 
     - name: Get Project Version from pom.xml
-      uses: entimaniac/read-pom-version-action@1.0.0
+      uses: entimaniac/read-pom-version-action@3e7b1466ddc9b8cfcfe8a57f04ba5bdbd1f113c6
       id: getVersion
 
     - name: Build java project
       run: mvn -DskipTests -B package --file pom.xml
 
     - name: Login to DockerHub
-      uses: docker/login-action@v2
+      uses: docker/login-action@49ed152c8eca782a232dede0303416e8f356c37b
       with:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     - name: Build and push
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@0a97817b6ade9f46837855d676c4cca3a2471fc9
       with:
           context: .
           platforms: linux/amd64,linux/arm64
