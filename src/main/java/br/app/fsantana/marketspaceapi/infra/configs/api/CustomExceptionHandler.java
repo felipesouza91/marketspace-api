@@ -42,16 +42,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private final MessageSource messageSource;
 
-  private final MessageSource messageSource;
-
-  @ExceptionHandler(AppEntityNotFound.class)
-  public ResponseEntity<Object> handleAppEntityNotFound(AppEntityNotFound ex, WebRequest request) {
-    HttpStatusCode statusCode = HttpStatus.NOT_FOUND;
-    ProblemDetail problemDetail = this.createProblemDetail(statusCode,
-        ProblemType.RECURSO_NAO_ENCONTRADO.getTitle(), ex.getMessage(), null);
-    return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), statusCode, request);
-  }
+    @ExceptionHandler(AppEntityNotFound.class)
+    public ResponseEntity<Object> handleAppEntityNotFound(AppEntityNotFound ex, WebRequest request) {
+        HttpStatusCode statusCode = HttpStatus.NOT_FOUND;
+        ProblemDetail problemDetail = this.createProblemDetail(statusCode,
+            ProblemType.RECURSO_NAO_ENCONTRADO.getTitle(), ex.getMessage(), null);
+        return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), statusCode, request);
+    }
 
     @ExceptionHandler(AppRuleException.class)
     public ResponseEntity<Object> handleAppRuleException(AppRuleException ex, WebRequest request) {
@@ -63,63 +62,60 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     /**
-   * AppSecurityException handle.
-   */
-  @ExceptionHandler({AppSecurityException.class , BadCredentialsException.class})
-  public ResponseEntity<Object> handleBusinessRuleException(Exception ex,
+    * AppSecurityException handle.
+    */
+    @ExceptionHandler({AppSecurityException.class , BadCredentialsException.class})
+    public ResponseEntity<Object> handleBusinessRuleException(Exception ex,
                                                        WebRequest request) {
-    HttpStatusCode status = HttpStatus.UNAUTHORIZED;
-    ProblemDetail problemDetail = this.createProblemDetail(status,
-        ProblemType.ACESSO_NEGADO.getTitle(),
-        ex.getMessage(), null);
-    return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), status, request);
-  }
-
-  /**
-   * Custom method.
-   */
-  @ExceptionHandler({Exception.class, AppException.class})
-  public ResponseEntity<Object> handlerUncaught(Exception ex, WebRequest request) {
-    HttpStatusCode status = HttpStatus.INTERNAL_SERVER_ERROR;
-    String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o "
-        + "problema persistir, entre em contato com o administrador do sistema.";
-    ProblemDetail problem = this.createProblemDetail(status, ProblemType.ERRO_DE_SISTEMA.getTitle(),
-        detail, null);
-    return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-  }
-
-  @Override
-  @Nullable
-  protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body,
-      HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
-    log.catching(ex);
-    return super.handleExceptionInternal(ex, body, headers, statusCode, request);
-  }
-
-  @Override
-  @Nullable
-  protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-                                                                HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    Throwable rootCause = ExceptionUtils.getRootCause(ex);
-    String detail = "O corpo da requisição esta invalido. Verifique erro na sintaxe";
-    if (rootCause instanceof InvalidFormatException invalidCause) {
-      return handleInvalidFormatException( invalidCause, headers, status,
-          request);
-    } else if (rootCause instanceof PropertyBindingException bindCause) {
-      return handlePropertyBindingException(bindCause, headers, status,
-          request);
+        HttpStatusCode status = HttpStatus.UNAUTHORIZED;
+        ProblemDetail problemDetail = this.createProblemDetail(status,
+            ProblemType.ACESSO_NEGADO.getTitle(),
+            ex.getMessage(), null);
+        return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), status, request);
     }
-    ProblemDetail problem = this.createProblemDetail(status,
-        ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
-    return this.handleExceptionInternal(ex, problem, headers, status, request);
-  }
 
-  @Override
-  @Nullable
-  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+    /**
+    * Custom method.
+    */
+    @ExceptionHandler({Exception.class, AppException.class})
+    public ResponseEntity<Object> handlerUncaught(Exception ex, WebRequest request) {
+        HttpStatusCode status = HttpStatus.INTERNAL_SERVER_ERROR;
+        String detail = "Ocorreu um erro interno inesperado no sistema. Tente novamente e se o "
+            + "problema persistir, entre em contato com o administrador do sistema.";
+        ProblemDetail problem = this.createProblemDetail(status, ProblemType.ERRO_DE_SISTEMA.getTitle(),
+            detail, null);
+        return this.handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body,
+      HttpHeaders headers, HttpStatusCode statusCode, WebRequest request) {
+        log.catching(ex);
+        return super.handleExceptionInternal(ex, body, headers, statusCode, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                 HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    return this.handlerInternalValidation(ex, ex.getBindingResult(), headers, status, request);
-  }
+        Throwable rootCause = ExceptionUtils.getRootCause(ex);
+        String detail = "O corpo da requisição esta invalido. Verifique erro na sintaxe";
+        if (rootCause instanceof InvalidFormatException invalidCause) {
+          return handleInvalidFormatException( invalidCause, headers, status,
+              request);
+        } else if (rootCause instanceof PropertyBindingException bindCause) {
+          return handlePropertyBindingException(bindCause, headers, status,
+              request);
+        }
+        ProblemDetail problem = this.createProblemDetail(status,
+            ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
+        return this.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return this.handlerInternalValidation(ex, ex.getBindingResult(), headers, status, request);
+    }
 
     @Override
     protected ResponseEntity<Object> handleHandlerMethodValidationException(
@@ -140,75 +136,76 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-  @Nullable
-  protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
+    @Nullable
+    protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
           HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatusCode status,
           WebRequest request) {
-    String detail = "O metodo requisitado não e suportado";
-    String title = "Metodo não permitido";
-    ProblemDetail problemDetail = this.createProblemDetail(status, title, detail, null);
-    return handleExceptionInternal(ex, problemDetail, headers, status, request);
-  }
-
-  private ResponseEntity<Object> handlerInternalValidation(Exception ex,
-                                                           BindingResult bindingResult, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    String detail = "Um ou mais campos estão invalidos."
-        + " Faça o preenchimento correto e tente novamente";
-    List<FieldProblem> fields = this.buildFields(bindingResult.getAllErrors());
-
-    ProblemDetail problem = this.createProblemDetail(status, ProblemType.DADOS_INVALIDOS.getTitle(),
-        detail, fields);
-
-    return this.handleExceptionInternal(ex, problem, headers, status, request);
-  }
-
-  private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
-      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    String path = joinPath(ex.getPath());
-    String detail = String.format(
-        "A propriedade '%s' não existe. " + "Corrija ou remova essa propriedade e tente novamente.",
-        path);
-    ProblemDetail problem = this.createProblemDetail(status,
-        ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
-    return handleExceptionInternal(ex, problem, headers, status, request);
-  }
-
-  private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
-      HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-
-    String path = joinPath(ex.getPath());
-    String detail = String.format("A propriedate '%s' recebeu o valor '%s'"
-            + " que é de um tipo invalido. Corrija e informe um valor compativel com o tipo '%s'.",
-        path, ex.getValue(), ex.getTargetType().getSimpleName());
-    ProblemDetail problemdetail = this.createProblemDetail(status,
-        ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
-    return handleExceptionInternal(ex, problemdetail, headers, status, request);
-  }
-
-  private String joinPath(List<JsonMappingException.Reference> list) {
-    return list.stream().map(JsonMappingException.Reference::getFieldName).collect(Collectors.joining("."));
-  }
-
-  private List<FieldProblem> buildFields(List<ObjectError> list) {
-    return list.stream().map(objectError -> {
-      String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
-      String nome = objectError.getObjectName();
-      if (objectError instanceof FieldError fieldError) {
-        nome = fieldError.getField();
-      }
-      return FieldProblem.builder().name(nome).detail(message).build();
-    }).toList();
-  }
-
-  private ProblemDetail createProblemDetail(HttpStatusCode statusCode, String title, String detail,
-      List<FieldProblem> objects) {
-    ProblemDetail problemDetail = ProblemDetail.forStatus(statusCode);
-    problemDetail.setTitle(title);
-    problemDetail.setDetail(detail);
-    problemDetail.setProperty("timestamp", OffsetDateTime.now().toInstant().getEpochSecond());
-    if (objects != null) {
-      problemDetail.setProperty("objects", objects);
+        String detail = "O metodo requisitado não e suportado";
+        String title = "Metodo não permitido";
+        ProblemDetail problemDetail = this.createProblemDetail(status, title, detail, null);
+        return handleExceptionInternal(ex, problemDetail, headers, status, request);
     }
-    return problemDetail;
-  }
+
+    private ResponseEntity<Object> handlerInternalValidation(Exception ex,
+                                                           BindingResult bindingResult, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        String detail = "Um ou mais campos estão invalidos."
+            + " Faça o preenchimento correto e tente novamente";
+        List<FieldProblem> fields = this.buildFields(bindingResult.getAllErrors());
+
+        ProblemDetail problem = this.createProblemDetail(status, ProblemType.DADOS_INVALIDOS.getTitle(),
+            detail, fields);
+
+        return this.handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex,
+        HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        String path = joinPath(ex.getPath());
+        String detail = String.format(
+            "A propriedade '%s' não existe. " + "Corrija ou remova essa propriedade e tente novamente.",
+            path);
+        ProblemDetail problem = this.createProblemDetail(status,
+        ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
+        return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex,
+          HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+        String path = joinPath(ex.getPath());
+        String detail = String.format("A propriedate '%s' recebeu o valor '%s'"
+                + " que é de um tipo invalido. Corrija e informe um valor compativel com o tipo '%s'.",
+            path, ex.getValue(), ex.getTargetType().getSimpleName());
+        ProblemDetail problemdetail = this.createProblemDetail(status,
+            ProblemType.MENSAGEM_INCOMPREENSIVEL.getTitle(), detail, null);
+        return handleExceptionInternal(ex, problemdetail, headers, status, request);
+    }
+
+    private String joinPath(List<JsonMappingException.Reference> list) {
+        return list.stream().map(JsonMappingException.Reference::getFieldName).collect(Collectors.joining("."));
+    }
+
+
+    private List<FieldProblem> buildFields(List<ObjectError> list) {
+        return list.stream().map(objectError -> {
+          String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+          String nome = objectError.getObjectName();
+          if (objectError instanceof FieldError fieldError) {
+            nome = fieldError.getField();
+          }
+          return FieldProblem.builder().name(nome).detail(message).build();
+        }).toList();
+    }
+
+    private ProblemDetail createProblemDetail(HttpStatusCode statusCode, String title, String detail,
+      List<FieldProblem> objects) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(statusCode);
+        problemDetail.setTitle(title);
+        problemDetail.setDetail(detail);
+        problemDetail.setProperty("timestamp", OffsetDateTime.now().toInstant().getEpochSecond());
+        if (objects != null) {
+          problemDetail.setProperty("objects", objects);
+        }
+        return problemDetail;
+    }
 }
