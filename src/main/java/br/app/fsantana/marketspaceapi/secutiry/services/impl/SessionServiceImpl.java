@@ -1,6 +1,7 @@
 package br.app.fsantana.marketspaceapi.secutiry.services.impl;
 
 import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppEntityNotFound;
 import br.app.fsantana.marketspaceapi.domain.models.RefreshToken;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.domain.services.RefreshTokenService;
@@ -69,6 +70,14 @@ public class SessionServiceImpl implements SessionService {
         String jwtToken = tokenService.generateToken(refreshTokenFind.getUser());
 
         return new Auth(refreshTokenFind.getUser(), jwtToken, generate.getId().toString());
+    }
+
+    @Override
+    public Auth createToken(User user) {
+        userDataProvider.findById(user.getId()).orElseThrow(() -> new AppEntityNotFound("User not found"));
+        RefreshToken generate = refreshTokenService.generate(user);
+        String jwtToken = tokenService.generateToken(user);
+        return new Auth(user, jwtToken, generate.getId().toString());
     }
 
 }

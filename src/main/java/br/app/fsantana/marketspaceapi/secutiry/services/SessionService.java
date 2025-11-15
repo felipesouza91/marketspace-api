@@ -16,4 +16,5 @@ public interface SessionService  {
 
     Auth refreshToken(UUID refreshToken);
 
+    Auth createToken(User user);
 }
