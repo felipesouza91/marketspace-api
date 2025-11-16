@@ -15,6 +15,8 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
@@ -82,8 +84,7 @@ class FileControllerIT extends TestIntegrationConfigLocalStorage  {
                 .then()
                 .statusCode(200)
                 .body("id", notNullValue())
-                .body("imageUrl", notNullValue())
-                .body("imageUrl", notNullValue());
+                .body("imageUrl[0]", containsString("http"));
     }
 
     @Test
