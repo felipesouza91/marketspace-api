@@ -40,7 +40,7 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
             Path saved = Path.of(localProperties.getPath(), path, fileName).normalize();
 
             Files.copy(inputStream, saved, StandardCopyOption.REPLACE_EXISTING);
-            return saved.toString();
+            return getFileUrl(path, fileName);
         } catch (Exception e) {
             throw new AppException("Erro when update files",e);
         }
