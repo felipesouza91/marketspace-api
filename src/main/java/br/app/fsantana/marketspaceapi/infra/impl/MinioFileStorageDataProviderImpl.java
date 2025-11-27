@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.Optional;
 
 /**
  * Created by felip on 17/10/2025.
@@ -44,7 +45,7 @@ public class MinioFileStorageDataProviderImpl implements StorageDataProvider {
                                     inputStream, inputStream.available(), -1)
                             .contentType(contentType)
                             .build());
-            return getFileUrl(path, fileName );
+            return getFileUrl(path, fileName ).orElse(null);
         } catch (Exception e) {
             log.error(e);
             throw new AppFileException("Erro during upload", e);
@@ -65,15 +66,17 @@ public class MinioFileStorageDataProviderImpl implements StorageDataProvider {
     }
 
     @Override
-    public String getFileUrl(String path, String fileName) {
+    public Optional<String> getFileUrl(String path, String fileName) {
         try {
-            return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+            String presignedObjectUrl = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(properties.getBucketName())
                     .object(getNameWithPath(path, fileName))
-                            .method(Method.GET)
+                    .method(Method.GET)
                     .build());
+            return Optional.of(presignedObjectUrl);
         } catch (Exception e) {
-            throw new AppFileException("Generate url fail",e);
+            log.info(e);
+            return Optional.empty();
         }
     }
 
