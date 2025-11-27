@@ -63,6 +63,7 @@ class MeControllerIT extends TestIntegrationConfig  {
                 .body("name", hasItem(product.getName()))
                 .body("price", notNullValue())
                 .body("isNew", hasItem(product.getIsNew()))
+                .body("isActive", hasItem(product.getIsActive()))
                 .body("acceptTrade", hasItem(product.getAcceptTrade()))
                 .body("paymentMethods.key", notNullValue());
     }

@@ -6,9 +6,6 @@ import jakarta.persistence.PostLoad;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by felip on 19/10/2025.
- */
 
 @Service
 @RequiredArgsConstructor
@@ -18,7 +15,7 @@ public class FileDataProviderEventListener {
 
     @PostLoad
     public void setImageUrl(File file) {
-        String url = storageDataProvider.getFileUrl(file.getPath(), file.getFileName());
+        String url = storageDataProvider.getFileUrl(file.getPath(), file.getFileName()).orElse(null);
         file.setImageUrl(url);
     }
 }
