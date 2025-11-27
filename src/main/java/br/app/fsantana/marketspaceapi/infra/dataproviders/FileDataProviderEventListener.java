@@ -18,7 +18,7 @@ public class FileDataProviderEventListener {
 
     @PostLoad
     public void setImageUrl(File file) {
-        String url = storageDataProvider.getFileUrl(file.getPath(), file.getFileName());
+        String url = storageDataProvider.getFileUrl(file.getPath(), file.getFileName()).orElse(null);
         file.setImageUrl(url);
     }
 }
