@@ -181,7 +181,7 @@ class FileControllerIT extends TestIntegrationConfigLocalStorage  {
                 .get("/files/{fileName}", productImage.getFileName())
                 .then()
                 .statusCode(404)
-                .body("detail", is("File not found"));
+                .body("detail", is("Load file error"));
     }
 
     @Test
