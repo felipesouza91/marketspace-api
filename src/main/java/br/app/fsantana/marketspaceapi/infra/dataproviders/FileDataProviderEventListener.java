@@ -6,9 +6,6 @@ import jakarta.persistence.PostLoad;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Created by felip on 19/10/2025.
- */
 
 @Service
 @RequiredArgsConstructor
