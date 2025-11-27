@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 
 /**
  * Created by felip on 20/10/2025.
@@ -40,7 +40,7 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
             Path saved = Path.of(localProperties.getPath(), path, fileName).normalize();
 
             Files.copy(inputStream, saved, StandardCopyOption.REPLACE_EXISTING);
-            return getFileUrl(path, fileName);
+            return getFileUrl(path, fileName).orElse(null);
         } catch (Exception e) {
             throw new AppException("Erro when update files",e);
         }
@@ -54,11 +54,11 @@ public class LocalStorageDataProviderImpl implements LocalStorageDataProvider {
     }
 
     @Override
-    public String getFileUrl(String path, String fileName) {
+    public Optional<String> getFileUrl(String path, String fileName) {
         if (fileExits(path, fileName)) {
-            return String.format("%s/files/%s",localProperties.getApiUrl(), fileName);
+            return Optional.of(String.format("%s/files/%s",localProperties.getApiUrl(), fileName));
         }
-        throw new AppFileException("File not found");
+        return Optional.empty();
     }
 
     @Override
