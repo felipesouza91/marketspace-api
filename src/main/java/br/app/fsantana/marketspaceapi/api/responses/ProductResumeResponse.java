@@ -19,6 +19,7 @@ public class ProductResumeResponse {
     private BigDecimal price;
     private Boolean isNew;
     private Boolean acceptTrade;
+    private Boolean isActive;
     private List<ProductImageResumeResponse> images;
     private List<PaymentResumeResponse> paymentMethods;
     private String userAvatar;

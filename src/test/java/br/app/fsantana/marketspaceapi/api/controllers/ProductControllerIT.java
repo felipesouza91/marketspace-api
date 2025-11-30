@@ -368,6 +368,8 @@ class ProductControllerIT extends TestIntegrationConfig {
                 .get("/products")
                 .then()
                 .statusCode(200)
-                .body("size()", is(Integer.valueOf(String.valueOf(totalProducs))));
+                .body("size()", is(Integer.valueOf(String.valueOf(totalProducs))))
+                .body("isActive", notNullValue());
+        ;
     }
 }
