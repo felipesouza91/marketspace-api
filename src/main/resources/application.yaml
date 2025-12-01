@@ -20,7 +20,7 @@ api:
   security:
     token:
       secret: ${TOKEN_SECRET}
-      expiration-time: ${TOKEN_EXPIRATION_TIME:60} # 1h in minuts
+      expiration-time: ${TOKEN_EXPIRATION_TIME:3600} # 1h in seconds
 
   storage:
     minio:
