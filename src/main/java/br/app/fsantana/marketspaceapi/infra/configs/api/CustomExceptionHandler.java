@@ -5,7 +5,7 @@ import br.app.fsantana.marketspaceapi.domain.exceptions.AppException;
 import br.app.fsantana.marketspaceapi.domain.exceptions.AppRuleException;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.FieldProblem;
 import br.app.fsantana.marketspaceapi.infra.configs.api.dto.ProblemType;
-import br.app.fsantana.marketspaceapi.utils.mappers.AppSecurityException;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppSecurityException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
@@ -59,7 +59,6 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
                 ProblemType.ERRO_NEGOCIO.getTitle(), ex.getMessage(), null);
         return this.handleExceptionInternal(ex, problemDetail, new HttpHeaders(), statusCode, request);
     }
-
 
     /**
     * AppSecurityException handle.
