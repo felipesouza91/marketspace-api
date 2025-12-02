@@ -4,6 +4,8 @@ import br.app.fsantana.marketspaceapi.domain.dataprovider.UserDataProvider;
 import br.app.fsantana.marketspaceapi.domain.models.User;
 import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import br.app.fsantana.marketspaceapi.secutiry.services.TokenService;
+import br.app.fsantana.marketspaceapi.domain.exceptions.AppSecurityException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -66,6 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
             filterChain.doFilter(request, response);
+        }  catch (ExpiredJwtException e) {
+            handlerExceptionResolver.resolveException(request, response, null, new AppSecurityException("Token invalid"));
         } catch (Exception exception) {
             logger.error(exception);
             handlerExceptionResolver.resolveException(request, response, null, exception);

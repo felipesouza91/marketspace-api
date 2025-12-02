@@ -94,7 +94,7 @@ public class TokenServiceImpl implements TokenService {
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getId().toString())
                 .setIssuedAt(Date.from(OffsetDateTime.now().toInstant()))
-                .setExpiration( Date.from(OffsetDateTime.now().plusMinutes(expiration).toInstant()) )
+                .setExpiration( Date.from(OffsetDateTime.now().plusSeconds(expiration).toInstant()) )
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

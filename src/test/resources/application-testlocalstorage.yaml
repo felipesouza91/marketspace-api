@@ -21,4 +21,4 @@ api:
   security:
     token:
       secret: ${TOKEN_SECRET}
-      expiration-time: ${TOKEN_EXPIRATION_TIME:60}
+      expiration-time: ${TOKEN_EXPIRATION_TIME:360}

@@ -9,6 +9,7 @@ import br.app.fsantana.marketspaceapi.secutiry.models.Auth;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.notNullValue;
 /**
  * Created by felip on 20/10/2025.
  */
+@TestPropertySource(locations = "classpath:application-test.yaml", properties = "api.security.token.expiration-time=1")
 class SessionControllerIT  extends TestIntegrationConfig {
 
     @Test
@@ -162,5 +164,19 @@ class SessionControllerIT  extends TestIntegrationConfig {
                 .then()
                 .statusCode(401)
                 .body("detail", is("Bad credentials"));
+    }
+
+
+    @Test
+    @DisplayName("should return 400 when token expirs")
+    void test7() throws InterruptedException {
+        Auth auth = token();
+        Thread.sleep(2*1000);
+        given()
+                .auth().oauth2(auth.getToken())
+                .when()
+                .get("/me/products")
+                .then()
+                .statusCode(401);
     }
 }
