@@ -24,6 +24,7 @@ public interface ProductMapper {
     @Mapping(source = "user.avatar.imageUrl", target = "user.avatar")
     ProductResponse toResponse(Product product);
 
+    @Mapping(source = "user.avatar.imageUrl", target = "userAvatar")
     @Mapping(source = "productImages", target = "images")
     ProductResumeResponse toResponseResume(Product product);
 
